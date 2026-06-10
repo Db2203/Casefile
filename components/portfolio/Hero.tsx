@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import {
+  animate,
   motion,
-  useMotionTemplate,
   useMotionValue,
   useReducedMotion,
   useSpring,
@@ -18,43 +18,126 @@ import Annotation from "@/components/detective/Annotation";
 
 /**
  * THE SIGNATURE — "detective in the dark."
- * The hero renders fully lit, then (on capable devices) a near-black shroud
- * with a flashlight hole bound to the cursor's motion values covers it.
- * Move the light to read. Hold the mouse down to widen the beam.
+ * The hero renders fully lit; on capable devices a near-black shroud with a
+ * flashlight hole covers it. After the boot, the beam runs ONE slow sweep
+ * across the headline (so it's guaranteed to be read), then hands control to
+ * the cursor. Hold the mouse down to widen the beam. "LIGHTS ON" opts out.
+ *
+ * Perf: the shroud is a huge gradient layer moved with transform only
+ * (composite-only — no per-frame gradient repaint). The hole radius is
+ * animated by scaling the layer.
+ *
  * Mobile / reduced-motion / SSR / crawlers: no shroud — fully lit, real HTML.
  */
+
+// Gradient hole base radius in px at scale=1; effective radius = scale * R.
+const HOLE_R = 400;
+const REST_SCALE = 0.5; // ~200px beam
+const WIDE_SCALE = 1.05; // while pointer held
+const SWEEP_SCALE = 0.68; // during the intro sweep
+
 export default function Hero() {
   const { canEnhance } = useMediaPreferences();
   const reduced = useReducedMotion();
   const bootDone = useNoir((s) => s.bootDone);
   const [lightsOn, setLightsOn] = useState(false);
 
-  // Flashlight position: looser spring than the cursor dot → the light lags
-  // like a real handheld beam.
-  const lx = useSpring(pointerX, { stiffness: 140, damping: 22, mass: 0.8 });
-  const ly = useSpring(pointerY, { stiffness: 140, damping: 22, mass: 0.8 });
-  // Beam radius widens while the pointer is held down.
-  const radius = useMotionValue(260);
-  const r = useSpring(radius, { stiffness: 180, damping: 24 });
-
-  // Outside the beam stays moody but READABLE — never pitch black.
-  const shroud = useMotionTemplate`radial-gradient(circle ${r}px at ${lx}px ${ly}px, transparent 0%, rgba(5,5,7,0.55) 45%, rgba(5,5,7,0.8) 80%)`;
+  // Light target (set by sweep choreography, then by the pointer).
+  const tx = useMotionValue(-600);
+  const ty = useMotionValue(-600);
+  const lx = useSpring(tx, { stiffness: 140, damping: 22, mass: 0.8 });
+  const ly = useSpring(ty, { stiffness: 140, damping: 22, mass: 0.8 });
+  const tScale = useMotionValue(REST_SCALE);
+  const s = useSpring(tScale, { stiffness: 160, damping: 26 });
 
   const flashlightActive = canEnhance && !lightsOn;
 
   useEffect(() => {
     if (!flashlightActive) return;
-    const unbind = bindPointer();
-    const down = () => radius.set(400);
-    const up = () => radius.set(260);
+
+    const unbindPointer = bindPointer();
+    const subs: (() => void)[] = [() => unbindPointer()];
+    let handedOver = false;
+
+    const handOverToPointer = () => {
+      if (handedOver) return;
+      handedOver = true;
+      tScale.set(REST_SCALE);
+      tx.set(pointerX.get());
+      ty.set(pointerY.get());
+      subs.push(pointerX.on("change", (v) => tx.set(v)));
+      subs.push(pointerY.on("change", (v) => ty.set(v)));
+    };
+
+    // Beam widens while pointer is held (only once the user has control).
+    const down = () => {
+      if (handedOver) tScale.set(WIDE_SCALE);
+    };
+    const up = () => {
+      if (handedOver) tScale.set(REST_SCALE);
+    };
     window.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
-    return () => {
-      unbind();
+    subs.push(() => {
       window.removeEventListener("pointerdown", down);
       window.removeEventListener("pointerup", up);
+    });
+
+    // One cinematic sweep across the headline per session; any pointer
+    // movement cancels it and gives the visitor the light immediately.
+    let swept = true;
+    try {
+      swept = sessionStorage.getItem("noir-sweep") === "1";
+    } catch {
+      /* ignore */
+    }
+
+    if (swept || !bootDone) {
+      if (bootDone) handOverToPointer();
+      return () => subs.forEach((fn) => fn());
+    }
+
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const markSwept = () => {
+      try {
+        sessionStorage.setItem("noir-sweep", "1");
+      } catch {
+        /* ignore */
+      }
     };
-  }, [flashlightActive, radius]);
+
+    tx.set(w * 0.04);
+    ty.set(h * 0.34);
+    tScale.set(SWEEP_SCALE);
+    const sweepX = animate(tx, [w * 0.04, w * 0.66], {
+      duration: 2.4,
+      ease: "easeInOut",
+    });
+    const sweepY = animate(ty, [h * 0.34, h * 0.62], {
+      duration: 2.4,
+      ease: "easeInOut",
+    });
+    sweepX.then(() => {
+      markSwept();
+      handOverToPointer();
+    });
+
+    const cancelSweep = () => {
+      sweepX.stop();
+      sweepY.stop();
+      markSwept();
+      handOverToPointer();
+    };
+    window.addEventListener("pointermove", cancelSweep, { once: true });
+    subs.push(() => {
+      window.removeEventListener("pointermove", cancelSweep);
+      sweepX.stop();
+      sweepY.stop();
+    });
+
+    return () => subs.forEach((fn) => fn());
+  }, [flashlightActive, bootDone, tx, ty, tScale]);
 
   const show = bootDone || reduced;
 
@@ -86,15 +169,20 @@ export default function Hero() {
       />
 
       {/* top bar — above the shroud so it's always readable */}
-      <div className="relative z-40 flex items-center justify-between px-6 pt-6 font-mono text-[10px] tracking-[0.3em] text-ash sm:px-10">
+      <div className="relative z-40 flex flex-wrap items-center justify-between gap-y-3 px-6 pt-6 font-mono text-[10px] tracking-[0.3em] text-ash sm:px-10">
         <span className="text-bone">{profile.name.toUpperCase()}</span>
-        <nav className="hidden gap-7 md:flex" aria-label="Sections">
+        <span className="stamp order-2 text-signal md:order-3">
+          {profile.status}
+        </span>
+        <nav
+          className="order-3 flex w-full justify-center gap-5 md:order-2 md:w-auto md:gap-7"
+          aria-label="Sections"
+        >
           <a href="#work" className="link-wipe">CASES</a>
           <a href="#about" className="link-wipe">DOSSIER</a>
           <a href="#playground" className="link-wipe">WORKSHOP</a>
           <a href="#contact" className="link-wipe">SIGNAL</a>
         </nav>
-        <span className="stamp text-signal">{profile.status}</span>
       </div>
 
       {/* headline block */}
@@ -146,12 +234,29 @@ export default function Hero() {
       {flashlightActive && (
         <motion.div
           aria-hidden
-          className="absolute inset-0 z-30"
-          style={{ backgroundImage: shroud, willChange: "background-image" }}
+          className="absolute inset-0 z-30 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: show ? 1 : 0 }}
-          transition={{ duration: 1.4, delay: 0.9 }}
-        />
+          transition={{ duration: 1.2, delay: 0.7 }}
+        >
+          {/* huge gradient layer moved with transform only (composite-only) */}
+          <motion.div
+            className="absolute left-0 top-0"
+            style={{
+              x: lx,
+              y: ly,
+              scale: s,
+              translateX: "-50%",
+              translateY: "-50%",
+              // big enough that even at REST_SCALE (0.5) the layer covers the
+              // viewport diagonal with the hole at any corner, incl. 4K
+              width: "500vmax",
+              height: "500vmax",
+              willChange: "transform",
+              backgroundImage: `radial-gradient(circle ${HOLE_R}px at center, transparent 0%, rgba(5,5,7,0.55) 45%, rgba(5,5,7,0.8) 80%, rgba(5,5,7,0.8) 100%)`,
+            }}
+          />
+        </motion.div>
       )}
 
       {/* ── always-above-the-dark UI ─────────────────────────────── */}

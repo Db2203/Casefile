@@ -7,6 +7,7 @@ import CustomCursor from "@/components/cursor/CustomCursor";
 import SmoothScroll from "@/components/providers/SmoothScroll";
 import RainCanvas from "@/components/atmosphere/RainCanvas";
 import BootSequence from "@/components/atmosphere/BootSequence";
+import DescentMeter from "@/components/atmosphere/DescentMeter";
 import DetectiveMode from "@/components/detective/DetectiveMode";
 import KonamiEgg from "@/components/easter/KonamiEgg";
 
@@ -27,6 +28,7 @@ export default function SiteShell({ children }: { children: ReactNode }) {
 
       {/* atmosphere — fixed, root-level siblings */}
       {canEnhance && <RainCanvas />}
+      {canEnhance && <DescentMeter />}
       {!prefersReducedMotion && <div className="grain-layer" aria-hidden />}
       <div className="vignette-layer" aria-hidden />
 

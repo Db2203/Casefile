@@ -44,7 +44,7 @@ export default function BootSequence() {
 
     // Shorter ignition on touch devices.
     const coarse = window.matchMedia("(pointer: coarse)").matches;
-    const timer = setTimeout(finish, coarse ? 1500 : 2400);
+    const timer = setTimeout(finish, coarse ? 1200 : 1800);
     const skip = () => {
       clearTimeout(timer);
       finish();
@@ -76,13 +76,13 @@ export default function BootSequence() {
             }}
             initial={{ opacity: 0, scaleY: 0.2 }}
             animate={{ opacity: 1, scaleY: 1 }}
-            transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
           />
           {/* the mark, ignited by the beam */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92, filter: "blur(8px)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ delay: 0.7, duration: 0.9, ease: "easeOut" }}
+            transition={{ delay: 0.5, duration: 0.7, ease: "easeOut" }}
             className="relative"
           >
             <BatMark className="w-40 text-signal drop-shadow-[0_0_28px_rgba(245,178,26,0.5)] sm:w-56" />
@@ -92,7 +92,7 @@ export default function BootSequence() {
             className="absolute bottom-10 font-mono text-[10px] tracking-[0.4em] text-ash"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
+            transition={{ delay: 0.9 }}
           >
             {profile.name.toUpperCase()} — CASE ARCHIVE · CLICK TO SKIP
           </motion.p>

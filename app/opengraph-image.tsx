@@ -1,5 +1,6 @@
 import { ImageResponse } from "next/og";
 import { profile, hero } from "@/lib/content";
+import { BAT_PATH } from "@/components/atmosphere/BatMark";
 
 export const alt = `${profile.name} — ${profile.role}`;
 export const size = { width: 1200, height: 630 };
@@ -20,8 +21,27 @@ export default function OgImage() {
             "radial-gradient(80% 70% at 50% 110%, #15120a 0%, #0b0b0f 55%, #050507 100%)",
           color: "#e8e6e0",
           fontFamily: "sans-serif",
+          position: "relative",
         }}
       >
+        {/* the mark, hovering over the city glow */}
+        <svg
+          width="640"
+          height="320"
+          viewBox="0 0 200 100"
+          style={{ position: "absolute", top: 40, right: 40, opacity: 0.92 }}
+        >
+          <path d={BAT_PATH} fill="#181208" />
+        </svg>
+        <svg
+          width="220"
+          height="110"
+          viewBox="0 0 200 100"
+          style={{ position: "absolute", top: 150, right: 200 }}
+        >
+          <path d={BAT_PATH} fill="#f5b21a" />
+        </svg>
+
         <div
           style={{
             display: "flex",
@@ -32,7 +52,7 @@ export default function OgImage() {
           }}
         >
           <span>{hero.kicker}</span>
-          <span style={{ color: "#6b7280" }}>{profile.status}</span>
+          <span style={{ color: "#99a1b0" }}>{profile.status}</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -57,7 +77,7 @@ export default function OgImage() {
           </div>
         </div>
 
-        <div style={{ display: "flex", fontSize: 20, letterSpacing: 6, color: "#6b7280" }}>
+        <div style={{ display: "flex", fontSize: 20, letterSpacing: 6, color: "#99a1b0" }}>
           {`${profile.role.toUpperCase()} — BUILT AFTER DARK`}
         </div>
       </div>

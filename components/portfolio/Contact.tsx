@@ -3,6 +3,7 @@ import Reveal from "@/components/primitives/Reveal";
 import MagneticButton from "@/components/primitives/MagneticButton";
 import CursorZone from "@/components/cursor/CursorZone";
 import Annotation from "@/components/detective/Annotation";
+import CopyEmail from "./CopyEmail";
 
 /** The signal — magnetic CTA projecting an amber beam into the night. */
 export default function Contact() {
@@ -42,7 +43,7 @@ export default function Contact() {
         />
 
         <Reveal delay={0.15}>
-          <div className="mt-12">
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-3">
             <MagneticButton>
               <CursorZone variant="link">
                 <a
@@ -53,6 +54,7 @@ export default function Contact() {
                 </a>
               </CursorZone>
             </MagneticButton>
+            <CopyEmail email={contact.email} />
           </div>
         </Reveal>
 
