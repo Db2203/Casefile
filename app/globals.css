@@ -1,26 +1,265 @@
 @import "tailwindcss";
 
+@theme {
+  /* ── Noir palette — authoritative. ───────────────────────────── */
+  --color-void: #050507; /* page base */
+  --color-ink: #0b0b0f; /* primary surface */
+  --color-coal: #14141a; /* raised surfaces / cards */
+  --color-slate: #2a2d36; /* borders / dividers */
+  --color-ash: #99a1b0; /* muted text — kept light enough to read on void */
+  --color-bone: #e8e6e0; /* primary text (off-white) */
+  --color-signal: #f5b21a; /* amber bat-signal accent */
+  --color-signal-hot: #ffd24a; /* accent highlight / glow */
+  --color-scan: #2dd4bf; /* cold cyan — Detective Mode ONLY */
+
+  --font-display: var(--font-anton), Impact, sans-serif;
+  --font-sans: var(--font-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jbmono), ui-monospace, monospace;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  /* Lenis drives smooth scroll — native smooth would fight it. */
+  scroll-behavior: auto;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-void);
+  color: var(--color-bone);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* Custom cursor active → hide the native one (toggled by JS, never on touch). */
+body.cursor-none,
+body.cursor-none * {
+  cursor: none !important;
+}
+
+/* Keyboard users always keep visible focus, even with the custom cursor. */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: var(--color-signal);
+  color: #000;
+}
+
+/* ── Display type ────────────────────────────────────────────── */
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 0.92;
+  text-transform: uppercase;
+}
+
+/* ── Atmosphere overlays (fixed, root-level, pointer-events none) ── */
+
+/* Film grain — animated speckle, no asset. */
+.grain-layer {
+  position: fixed;
+  inset: -100%;
+  z-index: 70;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: radial-gradient(circle at 1px 1px, #fff 1px, transparent 0);
+  background-size: 3px 3px;
+  animation: grain-shift 0.9s steps(4) infinite;
+}
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  25% { transform: translate(-1.5%, 1%); }
+  50% { transform: translate(1%, -1.5%); }
+  75% { transform: translate(-1%, -1%); }
+  100% { transform: translate(0, 0); }
+}
+
+/* Cinematic vignette. */
+.vignette-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 90% at 50% 40%, transparent 62%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* Drifting fog bands. */
+.fog-band {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  will-change: transform;
+  animation: fog-drift 38s ease-in-out infinite alternate;
+}
+@keyframes fog-drift {
+  from { transform: translateX(-6%) translateY(0); }
+  to { transform: translateX(6%) translateY(-3%); }
+}
+
+/* ── Micro-interaction utilities ─────────────────────────────── */
+
+/* Amber underline that wipes in from the left. */
+.link-wipe {
+  background-image: linear-gradient(var(--color-signal), var(--color-signal));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 0% 2px;
+  transition: background-size 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.25s;
+  padding-bottom: 2px;
+}
+.link-wipe:hover {
+  background-size: 100% 2px;
+  color: var(--color-signal-hot);
+}
+
+/* Redaction bar — covers text until the parent .case-card is hovered/focused. */
+.redacted {
+  position: relative;
+  display: inline-block;
+}
+.redacted::after {
+  content: "";
+  position: absolute;
+  inset: -1px -4px;
+  background: repeating-linear-gradient(
+    90deg,
+    #18181f 0 14px,
+    #101016 14px 28px
+  );
+  transform-origin: left center;
+  transform: scaleX(1);
+  transition: transform 0.55s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.case-card:hover .redacted::after,
+.case-card:focus-within .redacted::after {
+  transform: scaleX(0);
+  transform-origin: right center;
+}
+
+/* Failing-neon flicker for the bat-mark watermark on hover. */
+.case-card:hover .emblem-flicker {
+  animation: neon-flicker 1.1s steps(1) infinite;
+}
+@keyframes neon-flicker {
+  0%, 100% { opacity: 0.85; }
+  8% { opacity: 0.2; }
+  12% { opacity: 0.9; }
+  38% { opacity: 0.35; }
+  42% { opacity: 0.95; }
+  74% { opacity: 0.5; }
+  78% { opacity: 0.9; }
+}
+
+/* Dossier stamp. */
+.stamp {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border: 1.5px solid currentColor;
+  border-radius: 2px;
+  transform: rotate(-3deg);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+}
+
+/* ── Detective Mode (cold cyan scan) ─────────────────────────── */
+.detective-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      rgba(45, 212, 191, 0.05) 0 1px,
+      transparent 1px 4px
+    ),
+    radial-gradient(100% 100% at 50% 50%, rgba(45, 212, 191, 0.07), rgba(45, 212, 191, 0.14));
+  mix-blend-mode: screen;
+  animation: scan-flicker 4s linear infinite;
+}
+@keyframes scan-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.7; }
+  94% { opacity: 1; }
+}
+.detective-on {
+  filter: hue-rotate(0deg); /* color shifts happen via the overlay, not a costly full-page filter */
+}
+
+/* ── Marquee (skills ticker) ─────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: marquee 30s linear infinite;
+}
+
+/* Thin scrollbar fitting the theme. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2d36 transparent;
+}
+
+/* Touch devices have no hover — never gate content behind it. */
+@media (hover: none) {
+  .redacted::after {
+    display: none;
+  }
+}
+
+/* Skip link — hidden until keyboard-focused. */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 1rem;
+  z-index: 110;
+  padding: 0.6rem 1rem;
+  background: var(--color-signal);
+  color: #000;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: top 0.2s;
+}
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* ── Reduced motion: strip decoration, keep information. ─────── */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track,
+  .grain-layer,
+  .fog-band,
+  .detective-overlay,
+  .case-card:hover .emblem-flicker {
+    animation: none !important;
+  }
+  .redacted::after {
+    display: none;
+  }
 }
