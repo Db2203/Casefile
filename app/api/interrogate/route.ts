@@ -26,6 +26,7 @@ interface Provider {
   url: string;
   key: string | undefined;
   model: string;
+  extraBody?: Record<string, unknown>;
 }
 
 function providerChain(): Provider[] {
@@ -48,6 +49,9 @@ function providerChain(): Provider[] {
       url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
       key: process.env.GEMINI_API_KEY,
       model: process.env.GEMINI_MODEL || "gemini-flash-latest",
+      // Gemini 2.5 Flash "thinks" by default and those hidden tokens eat the
+      // max_tokens budget — leaving the actual answer truncated. Turn it off.
+      extraBody: { reasoning_effort: "none" },
     },
   ];
   // drop keyless providers and duplicate models (e.g. GROQ_MODEL set to 8b)
@@ -189,6 +193,7 @@ export async function POST(req: Request) {
           max_tokens: 260,
           temperature: 0.6,
           stream: true,
+          ...provider.extraBody,
         }),
       });
       if (res.ok && res.body) {
