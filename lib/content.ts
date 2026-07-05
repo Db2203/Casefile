@@ -303,54 +303,6 @@ export const projects: Project[] = [
   },
 ];
 
-/* ── Witness statements (testimonials) ────────────────────────── */
-
-export type Testimonial = {
-  id: string;
-  witnessNo: string;
-  date: string;
-  relation: string;
-  quote: string;
-  name: string;
-  role: string;
-};
-
-export const testimonials: Testimonial[] = [
-  {
-    // [PLACEHOLDER] — swap for a real quote (hackathon teammate?)
-    id: "w1",
-    witnessNo: "01",
-    date: "2026-06-30",
-    relation: "TEAMMATE — NOSCALP",
-    quote:
-      "Most people demo a happy path. They demoed a 50,000-request stampede and dared the database to oversell. It didn't.",
-    name: "J. Doe", // [PLACEHOLDER]
-    role: "Hackathon Teammate",
-  },
-  {
-    // [PLACEHOLDER] — swap for a real quote
-    id: "w2",
-    witnessNo: "02",
-    date: "2026-06-11",
-    relation: "REVIEWER — SAFEROUTE",
-    quote:
-      "Half a million collision records in, one honest question out: what does the fast route actually cost you? That's the whole job, done right.",
-    name: "R. Smith", // [PLACEHOLDER]
-    role: "Code Reviewer",
-  },
-  {
-    // [PLACEHOLDER] — swap for a real quote
-    id: "w3",
-    witnessNo: "03",
-    date: "2026-05-19",
-    relation: "COLLEAGUE",
-    quote:
-      "Rare combination: profiles an ML pipeline in the morning and argues about a spring curve in the afternoon. Ship-ready in both.",
-    name: "A. Kumar", // [PLACEHOLDER]
-    role: "Colleague",
-  },
-];
-
 /* ── Playground ───────────────────────────────────────────────── */
 
 export type DemoKind = "kinetic" | "fluid" | "city" | "static";
@@ -399,8 +351,7 @@ export const annotations = {
     "Server-rendered semantic HTML. Everything you see is crawlable — the atmosphere is a client-side enhancement layer.",
   playground:
     "Each demo runs ONE rAF, gated by IntersectionObserver + visibilitychange — scrolled away or tab hidden, everything pauses.",
-  witnesses:
-    "Ruled paper is a repeating-linear-gradient. No images anywhere on this site — every texture is CSS or seeded SVG.",
+  log: "Real data: GitHub's public contribution calendar and events API, fetched at build time and revalidated daily. No tokens, no tracking — just the public record.",
   contact:
     "Magnetic button: spring toward pointer, snap home on leave. The beam is one shared conic-gradient utility.",
   case: "Statically generated at build time. The entrance is an overlay — the content underneath is server-rendered and crawlable.",

@@ -32,7 +32,7 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: "work", label: "CASES — SELECTED WORK" },
   { id: "about", label: "DOSSIER — ABOUT" },
   { id: "playground", label: "WORKSHOP — R&D" },
-  { id: "witnesses", label: "WITNESSES — STATEMENTS" },
+  { id: "log", label: "STAKEOUT — SURVEILLANCE LOG" },
   { id: "contact", label: "SIGNAL — CONTACT" },
 ];
 

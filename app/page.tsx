@@ -4,7 +4,7 @@ import Hero from "@/components/portfolio/Hero";
 import Work from "@/components/portfolio/Work";
 import About from "@/components/portfolio/About";
 import Playground from "@/components/portfolio/Playground";
-import Witnesses from "@/components/portfolio/Witnesses";
+import SurveillanceLog from "@/components/portfolio/SurveillanceLog";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
 
@@ -22,7 +22,7 @@ export default function Home() {
         <Work />
         <About />
         <Playground />
-        <Witnesses />
+        <SurveillanceLog />
         <Contact />
         <Footer />
       </main>

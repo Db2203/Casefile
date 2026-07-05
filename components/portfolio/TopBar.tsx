@@ -20,7 +20,7 @@ export default function TopBar() {
         <a href="#work" className="link-wipe py-2">CASES</a>
         <a href="#about" className="link-wipe py-2">DOSSIER</a>
         <a href="#playground" className="link-wipe py-2">WORKSHOP</a>
-        <a href="#witnesses" className="link-wipe py-2">WITNESSES</a>
+        <a href="#log" className="link-wipe py-2">STAKEOUT</a>
         <a href="#contact" className="link-wipe py-2">SIGNAL</a>
       </nav>
     </header>
