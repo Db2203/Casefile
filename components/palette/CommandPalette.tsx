@@ -52,7 +52,12 @@ export default function CommandPalette() {
   /* ── global hotkeys ─────────────────────────────────────────── */
   useEffect(() => {
     const onKey = (e: globalThis.KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        !e.shiftKey &&
+        !e.altKey &&
+        e.key.toLowerCase() === "k"
+      ) {
         e.preventDefault();
         setOpen(!useNoir.getState().paletteOpen);
         return;
@@ -78,16 +83,16 @@ export default function CommandPalette() {
   useEffect(() => {
     if (open) {
       prevFocus.current = document.activeElement as HTMLElement | null;
-      setScrollLocked(true);
+      setScrollLocked("palette", true);
       requestAnimationFrame(() => inputRef.current?.focus());
     } else {
-      setScrollLocked(false);
+      setScrollLocked("palette", false);
       setQuery("");
       setActive(0);
       setStatus("");
       prevFocus.current?.focus?.();
     }
-    return () => setScrollLocked(false);
+    return () => setScrollLocked("palette", false);
   }, [open]);
 
   useEffect(

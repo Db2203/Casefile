@@ -37,6 +37,8 @@ export default function KineticType() {
     const r = rect.current;
     const p = pointer.current;
     clock.current += dt;
+    // frame-rate-independent lerp (0.18 per frame at 60Hz)
+    const ease = 1 - Math.pow(1 - 0.18, dt * 60);
     for (let i = 0; i < WORD.length; i++) {
       const el = spans.current[i];
       if (!el) continue;
@@ -53,7 +55,7 @@ export default function KineticType() {
         const wave = Math.max(0, Math.sin(clock.current * 1.8 - i * 0.85));
         target = BASE_W + (MAX_W - BASE_W) * wave * 0.7;
       }
-      const w = (weights.current[i] += (target - weights.current[i]) * 0.18);
+      const w = (weights.current[i] += (target - weights.current[i]) * ease);
       const lift = ((w - BASE_W) / (MAX_W - BASE_W)) * -9;
       el.style.fontVariationSettings = `"wght" ${Math.round(w)}`;
       el.style.transform = `translateY(${lift.toFixed(1)}px)`;
@@ -67,6 +69,7 @@ export default function KineticType() {
       onPointerEnter={onEnter}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
+      role="img"
       aria-label="Kinetic typography demo — move your pointer over the word"
     >
       <span aria-hidden className="flex text-3xl tracking-[0.15em] text-bone">

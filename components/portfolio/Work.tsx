@@ -1,4 +1,5 @@
 import { projects } from "@/lib/content";
+import { evidenceImage } from "@/lib/assets";
 import Reveal from "@/components/primitives/Reveal";
 import Parallax from "@/components/primitives/Parallax";
 import { SkylineFar, SkylineMid } from "@/components/atmosphere/Skyline";
@@ -40,7 +41,12 @@ export default function Work() {
         <div className="grid gap-6 md:grid-cols-2">
           {projects.map((p, i) => (
             <Reveal key={p.id} delay={i * 0.08}>
-              <CaseCard project={p} />
+              <CaseCard
+                project={p}
+                evidenceImages={p.caseStudy.evidence
+                  .slice(0, 2)
+                  .map((ev) => evidenceImage(p.id, ev.id))}
+              />
             </Reveal>
           ))}
         </div>

@@ -22,9 +22,20 @@ export function scrollToSection(id: string) {
   }
 }
 
-/** Pause/resume user scrolling (used while the palette is open). */
-export function setScrollLocked(locked: boolean) {
-  if (!lenis) return;
-  if (locked) lenis.stop();
-  else lenis.start();
+/**
+ * Pause/resume user scrolling (palette, lightbox). Keyed + idempotent so
+ * overlapping consumers can't unlock each other, and it works WITHOUT Lenis
+ * too (mobile / reduced motion) via an overflow fallback.
+ */
+const locks = new Set<string>();
+
+export function setScrollLocked(key: string, locked: boolean) {
+  if (locked) locks.add(key);
+  else locks.delete(key);
+  const should = locks.size > 0;
+  if (lenis) {
+    if (should) lenis.stop();
+    else lenis.start();
+  }
+  document.documentElement.style.overflow = should ? "hidden" : "";
 }

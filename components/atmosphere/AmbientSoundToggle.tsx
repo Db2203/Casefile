@@ -67,7 +67,6 @@ export default function AmbientSoundToggle() {
         setSound(!soundOn);
       }}
       aria-pressed={soundOn}
-      aria-label={soundOn ? "Turn ambient sound off" : "Turn ambient sound on"}
       className={`rounded-sm border px-3 py-2 font-mono text-[10px] tracking-[0.25em] backdrop-blur transition-colors ${
         soundOn
           ? "border-signal/70 bg-signal/10 text-signal"

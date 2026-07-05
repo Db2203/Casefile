@@ -57,8 +57,10 @@ export default function TextScramble({
   }, [inView, reduced, text, speed]);
 
   return (
-    <span className={className} aria-label={text}>
-      {/* Server-rendered real text (SEO); the effect overwrites it client-side. */}
+    <span className={className}>
+      {/* real text for AT/SEO (aria-label is prohibited on generic spans) */}
+      <span className="sr-only">{text}</span>
+      {/* the visual scramble, hidden from assistive tech */}
       <span aria-hidden ref={ref}>
         {text}
       </span>

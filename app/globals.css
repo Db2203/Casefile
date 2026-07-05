@@ -237,10 +237,6 @@ body.cursor-none * {
   93% { opacity: 0.7; }
   94% { opacity: 1; }
 }
-.detective-on {
-  filter: hue-rotate(0deg); /* color shifts happen via the overlay, not a costly full-page filter */
-}
-
 /* ── Marquee (skills ticker) ─────────────────────────────────── */
 @keyframes marquee {
   from { transform: translateX(0); }

@@ -1,10 +1,12 @@
 import { about } from "@/lib/content";
+import { dossierPdfUrl } from "@/lib/assets";
 import Reveal from "@/components/primitives/Reveal";
 import Annotation from "@/components/detective/Annotation";
 
 /** The subject dossier — classified personnel file. */
 export default function About() {
   const marquee = [...about.skills, ...about.skills];
+  const dossier = dossierPdfUrl(); // button appears once public/dossier.pdf exists
 
   return (
     <section
@@ -38,6 +40,15 @@ export default function About() {
                 </div>
               ))}
             </dl>
+            {dossier && (
+              <a
+                href={dossier}
+                download
+                className="mt-8 inline-block border border-signal/60 bg-signal/5 px-5 py-3 font-mono text-[11px] tracking-[0.25em] text-signal transition-colors hover:bg-signal hover:text-void"
+              >
+                FULL DOSSIER (PDF) ↓
+              </a>
+            )}
           </Reveal>
 
           {/* statement */}

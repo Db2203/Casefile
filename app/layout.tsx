@@ -85,7 +85,10 @@ export default function RootLayout({
         </noscript>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          // escape "<" so owner-edited content can never break out of the tag
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
         />
         {children}
       </body>

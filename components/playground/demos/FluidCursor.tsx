@@ -20,18 +20,32 @@ export default function FluidCursor() {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    const w = canvas.clientWidth;
-    const h = canvas.clientHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
-    parts.current = Array.from({ length: COUNT }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      vx: 0,
-      vy: 0,
-    }));
+    const size = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = canvas.clientWidth;
+      const h = canvas.clientHeight;
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      canvas.getContext("2d")?.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (parts.current.length === 0) {
+        parts.current = Array.from({ length: COUNT }, () => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          vx: 0,
+          vy: 0,
+        }));
+      } else {
+        // keep the swarm inside the new bounds after a resize/orientation change
+        for (const p of parts.current) {
+          p.x = Math.min(p.x, w);
+          p.y = Math.min(p.y, h);
+        }
+      }
+    };
+    size();
+    const ro = new ResizeObserver(size);
+    ro.observe(canvas);
+    return () => ro.disconnect();
   }, []);
 
   const onMove = (e: PointerEvent<HTMLCanvasElement>) => {
@@ -60,13 +74,15 @@ export default function FluidCursor() {
     const ay = p ? p.y : h / 2 + Math.cos(t.current * 1.1) * h * 0.28;
     const G = p ? 900 : 320;
 
+    // frame-rate-independent damping (0.94 per frame at 60Hz)
+    const damp = Math.pow(0.94, dt * 60);
     for (const pt of parts.current) {
       const dx = ax - pt.x;
       const dy = ay - pt.y;
       const d2 = Math.max(180, dx * dx + dy * dy);
       const f = (G / d2) * 60 * dt;
-      pt.vx = (pt.vx + dx * f) * 0.94;
-      pt.vy = (pt.vy + dy * f) * 0.94;
+      pt.vx = (pt.vx + dx * f) * damp;
+      pt.vy = (pt.vy + dy * f) * damp;
       pt.x += pt.vx * 60 * dt;
       pt.y += pt.vy * 60 * dt;
       // soft wrap
@@ -87,6 +103,7 @@ export default function FluidCursor() {
       className="h-full w-full"
       onPointerMove={onMove}
       onPointerLeave={onLeave}
+      role="img"
       aria-label="Particle field demo — move your pointer to attract the swarm"
     />
   );

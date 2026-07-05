@@ -28,6 +28,8 @@ export default function BootSequence() {
     setBootDone(false);
   }, [bootNonce, setBootDone]);
 
+  // bootNonce in deps: "REPLAY BOOT SEQUENCE" re-runs this whole choreography
+  // (the effect above cleared the session gates first — effect order matters).
   useEffect(() => {
     let seen = false;
     try {
@@ -69,7 +71,7 @@ export default function BootSequence() {
       window.removeEventListener("pointerdown", skip);
       window.removeEventListener("keydown", skip);
     };
-  }, [setBootDone]);
+  }, [setBootDone, bootNonce]);
 
   return (
     <AnimatePresence>

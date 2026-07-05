@@ -15,6 +15,7 @@ class AudioEngine {
   private master: GainNode | null = null;
   private thunderTimer: ReturnType<typeof setTimeout> | null = null;
   private stopTimer: ReturnType<typeof setTimeout> | null = null;
+  private closingCtx: AudioContext | null = null;
   private onVis = () => {
     if (!this.ctx) return;
     if (document.hidden) void this.ctx.suspend();
@@ -27,13 +28,21 @@ class AudioEngine {
 
   async start() {
     if (this.ctx) return; // idempotent
+    // a previous stop() may still be fading out — close its context NOW so
+    // rapid toggling can't accumulate live AudioContexts (browsers cap ~6)
     if (this.stopTimer) {
       clearTimeout(this.stopTimer);
       this.stopTimer = null;
     }
+    if (this.closingCtx) {
+      void this.closingCtx.close();
+      this.closingCtx = null;
+    }
     const ctx = new AudioContext();
     this.ctx = ctx;
     if (ctx.state === "suspended") await ctx.resume();
+    // stop() ran while we awaited? abort — it already closed this context.
+    if (this.ctx !== ctx) return;
 
     const master = ctx.createGain();
     master.gain.setValueAtTime(0, ctx.currentTime);
@@ -48,18 +57,28 @@ class AudioEngine {
 
   stop() {
     const ctx = this.ctx;
-    if (!ctx || !this.master) return;
+    if (!ctx) return;
     document.removeEventListener("visibilitychange", this.onVis);
     if (this.thunderTimer) clearTimeout(this.thunderTimer);
     this.thunderTimer = null;
+
+    if (!this.master) {
+      // start() is mid-await (graph not built yet) — close immediately;
+      // start() notices this.ctx changed and aborts.
+      this.ctx = null;
+      void ctx.close();
+      return;
+    }
 
     this.master.gain.cancelScheduledValues(ctx.currentTime);
     this.master.gain.setValueAtTime(this.master.gain.value, ctx.currentTime);
     this.master.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8);
     this.ctx = null;
     this.master = null;
+    this.closingCtx = ctx;
     this.stopTimer = setTimeout(() => {
       void ctx.close();
+      this.closingCtx = null;
       this.stopTimer = null;
     }, 900);
   }

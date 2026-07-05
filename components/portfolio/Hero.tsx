@@ -131,13 +131,21 @@ export default function Hero() {
     const subs: (() => void)[] = [() => unbindPointer()];
     let handedOver = false;
     let sweepStarted = false;
+    let cancelled = false; // teardown guard: stopped animations resolve their
+    // promise, so .then() callbacks can fire AFTER cleanup — never hand over then
 
     const handOverToPointer = () => {
-      if (handedOver) return;
+      if (handedOver || cancelled) return;
       handedOver = true;
       tScale.set(REST_SCALE);
-      tx.set(pointerX.get());
-      ty.set(pointerY.get());
+      // pointer hasn't moved yet (returning visitor)? light the headline
+      if (pointerX.get() < 0) {
+        tx.set(window.innerWidth * 0.32);
+        ty.set(window.innerHeight * 0.45);
+      } else {
+        tx.set(pointerX.get());
+        ty.set(pointerY.get());
+      }
       subs.push(pointerX.on("change", (v) => tx.set(v)));
       subs.push(pointerY.on("change", (v) => ty.set(v)));
     };
@@ -151,9 +159,12 @@ export default function Hero() {
     };
     window.addEventListener("pointerdown", down);
     window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
     subs.push(() => {
+      cancelled = true;
       window.removeEventListener("pointerdown", down);
       window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
     });
 
     // One cinematic sweep across the headline per session; any pointer
@@ -195,7 +206,9 @@ export default function Hero() {
       sweepX.stop();
       sweepY.stop();
       // LIGHTS ON (or unmount) mid-sweep counts as seen — never restart it.
-      if (sweepStarted) markSwept();
+      // EXCEPT during a boot replay (bootDone was just reset), where the
+      // whole point is to re-run the choreography.
+      if (sweepStarted && useNoir.getState().bootDone) markSwept();
     });
 
     return () => subs.forEach((fn) => fn());

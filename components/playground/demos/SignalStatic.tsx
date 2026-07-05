@@ -74,6 +74,7 @@ export default function SignalStatic() {
       className="h-full w-full [image-rendering:pixelated]"
       onPointerMove={onMove}
       onPointerLeave={() => (last.current = null)}
+      role="img"
       aria-label="Signal static demo — pointer speed drives the noise"
     />
   );

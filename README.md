@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🦇 Case Archive — a Batman-noir portfolio
 
-## Getting Started
+A noir, interaction-heavy portfolio built with **Next.js 16 + React 19 +
+TypeScript**, styled as a detective's case archive: near-black city, one amber
+signal, and a file for every project.
 
-First, run the development server:
+**Live demo:** _deploying soon_
+
+## The interesting parts
+
+- **Flashlight hero** — the page opens in the dark; your cursor is the light.
+  A 260vmax gradient layer moved with `transform` only (composite-only, zero
+  React re-renders per mousemove). Touch devices get an auto-roaming beam.
+- **One-rAF discipline** — Lenis smooth scroll rides Framer Motion's frame
+  loop; every playground demo runs a single rAF gated by IntersectionObserver
+  + `visibilitychange` (scroll away and everything pauses).
+- **WAYNE TERMINAL** — a zero-dependency command palette (Ctrl/Cmd+K) with the
+  full combobox ARIA pattern: fuzzy search, keyboard nav, focus trap/restore.
+- **Procedural everything** — no image or audio assets: textures are CSS,
+  evidence art is seeded deterministic SVG (hydration-stable), and the ambient
+  rain + thunder are synthesized with the Web Audio API (filtered noise +
+  brown-noise bursts).
+- **Live playground gadgets** — variable-font kinetic type, a pointer-gravity
+  particle field, a click-to-rebuild procedural skyline, velocity-reactive
+  static.
+- **Detective Mode** — press `D`: a scan overlay annotates how each section is
+  engineered.
+- **Progressive enhancement, properly** — all content is server-rendered
+  semantic HTML (SSG case-study pages, JSON-LD, sitemap); the atmosphere is a
+  client layer gated on pointer/motion capability, with full reduced-motion
+  fallbacks. Lighthouse: 90+ across the board.
+
+## Stack
+
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
+Motion (Framer Motion 12) · Lenis · Zustand
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Easter eggs
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Classified. (Try typing something a certain vigilante would answer to.)

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import type { Project } from "@/lib/content";
 import { setScrollLocked } from "@/lib/scroll";
-import EvidencePlaceholder from "./EvidencePlaceholder";
+import EvidenceVisual from "./EvidenceVisual";
 import Reveal from "@/components/primitives/Reveal";
 import CursorZone from "@/components/cursor/CursorZone";
 
@@ -15,7 +15,14 @@ const LETTERS = ["A", "B", "C", "D", "E"];
  * (Escape / backdrop closes; focus is trapped on the close button and
  * restored on close). Placeholder art now; real screenshots slot in later.
  */
-export default function EvidenceGrid({ project }: { project: Project }) {
+export default function EvidenceGrid({
+  project,
+  images = [],
+}: {
+  project: Project;
+  /** Real screenshot URLs (resolved server-side), aligned with evidence[]. */
+  images?: (string | null)[];
+}) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const reduced = useReducedMotion();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -29,11 +36,11 @@ export default function EvidenceGrid({ project }: { project: Project }) {
 
   useEffect(() => {
     if (openIdx === null) {
-      setScrollLocked(false);
+      setScrollLocked("lightbox", false);
       prevFocus.current?.focus?.();
       return;
     }
-    setScrollLocked(true);
+    setScrollLocked("lightbox", true);
     requestAnimationFrame(() => closeRef.current?.focus());
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
@@ -42,7 +49,7 @@ export default function EvidenceGrid({ project }: { project: Project }) {
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      setScrollLocked(false);
+      setScrollLocked("lightbox", false);
     };
   }, [openIdx]);
 
@@ -61,9 +68,11 @@ export default function EvidenceGrid({ project }: { project: Project }) {
                 aria-label={`Examine exhibit ${LETTERS[i] ?? i + 1}: ${ev.caption}`}
                 className="group block w-full border border-slate/70 bg-coal/60 p-2 pb-3 text-left transition-colors hover:border-signal/50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-signal"
               >
-                <EvidencePlaceholder
+                <EvidenceVisual
                   seed={`${project.id}-${ev.id}`}
                   kind={ev.kind}
+                  image={images[i]}
+                  alt={ev.caption}
                   className="h-auto w-full"
                 />
                 <span className="mt-3 flex items-baseline justify-between px-1 font-mono text-[10px] tracking-[0.25em] text-ash">
@@ -105,9 +114,11 @@ export default function EvidenceGrid({ project }: { project: Project }) {
               transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
               className="relative z-10 w-full max-w-3xl border border-signal/40 bg-ink p-3 pb-4 shadow-[0_0_90px_-25px_rgba(245,178,26,0.4)]"
             >
-              <EvidencePlaceholder
+              <EvidenceVisual
                 seed={`${project.id}-${current.id}`}
                 kind={current.kind}
+                image={images[openIdx]}
+                alt={current.caption}
                 className="h-auto w-full"
               />
               <figcaption className="mt-4 flex items-center justify-between gap-4 px-1 font-mono text-[11px] tracking-[0.25em] text-ash">

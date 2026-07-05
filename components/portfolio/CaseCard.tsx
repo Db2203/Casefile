@@ -9,14 +9,21 @@ import { useMediaPreferences } from "@/lib/useMediaPreferences";
 import CursorZone from "@/components/cursor/CursorZone";
 import TextScramble from "@/components/primitives/TextScramble";
 import BatMark from "@/components/atmosphere/BatMark";
-import EvidencePlaceholder from "@/components/case/EvidencePlaceholder";
+import EvidenceVisual from "@/components/case/EvidenceVisual";
 
 /**
  * A project as a noir case file: pointer-tilt dossier, redaction bar that
  * wipes off the summary on hover, decrypting title, flickering watermark.
  * Rect cached on enter; tilt driven by springs (no re-renders per move).
  */
-export default function CaseCard({ project }: { project: Project }) {
+export default function CaseCard({
+  project,
+  evidenceImages = [],
+}: {
+  project: Project;
+  /** Real screenshot URLs (resolved server-side), aligned with evidence[0..1]. */
+  evidenceImages?: (string | null)[];
+}) {
   const { canEnhance } = useMediaPreferences();
   const router = useRouter();
   const rect = useRef<DOMRect | null>(null);
@@ -123,9 +130,11 @@ export default function CaseCard({ project }: { project: Project }) {
                     i === 0 ? "rotate-6" : "-rotate-3"
                   }`}
                 />
-                <EvidencePlaceholder
+                <EvidenceVisual
                   seed={`${project.id}-${ev.id}`}
                   kind={ev.kind}
+                  image={evidenceImages[i]}
+                  alt={ev.caption}
                   className="h-auto w-full"
                 />
                 <span className="mt-1 block truncate px-0.5 font-mono text-[8px] tracking-[0.2em] text-ash">

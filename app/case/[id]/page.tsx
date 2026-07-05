@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { profile, projects, siteUrl } from "@/lib/content";
+import { evidenceImage } from "@/lib/assets";
 import SiteShell from "@/components/shell/SiteShell";
 import CaseHeader from "@/components/case/CaseHeader";
 import CaseEntrance from "@/components/case/CaseEntrance";
@@ -36,11 +37,18 @@ export async function generateMetadata({
   };
 }
 
-function Kicker({ children }: { children: React.ReactNode }) {
+function Kicker({
+  children,
+  as: Tag = "h2",
+}: {
+  children: React.ReactNode;
+  /** Section kickers are the page's real h2s (keeps heading order valid). */
+  as?: "h2" | "p";
+}) {
   return (
-    <p className="mb-3 font-mono text-[11px] tracking-[0.35em] text-signal">
+    <Tag className="mb-3 font-mono text-[11px] tracking-[0.35em] text-signal">
       {children}
-    </p>
+    </Tag>
   );
 }
 
@@ -75,7 +83,10 @@ export default async function CasePage({
     <SiteShell>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // escape "<" so owner-edited content can never break out of the tag
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <CaseHeader project={project} />
       <CaseEntrance>
@@ -84,7 +95,7 @@ export default async function CasePage({
 
           {/* dossier hero */}
           <section className="py-12 sm:py-24">
-            <Kicker>CASE #{project.caseNo} — {project.year}</Kicker>
+            <Kicker as="p">CASE #{project.caseNo} — {project.year}</Kicker>
             <h1 className="display text-[clamp(3rem,10vw,8rem)] text-bone">
               {project.title}
             </h1>
@@ -156,7 +167,10 @@ export default async function CasePage({
               <Kicker>05 — EVIDENCE</Kicker>
             </Reveal>
             <div className="mt-8">
-              <EvidenceGrid project={project} />
+              <EvidenceGrid
+                project={project}
+                images={cs.evidence.map((ev) => evidenceImage(project.id, ev.id))}
+              />
             </div>
           </section>
 
