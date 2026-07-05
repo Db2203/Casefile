@@ -6,17 +6,27 @@ import {
   useMotionValueEvent,
   useScroll,
   useSpring,
+  useTransform,
 } from "motion/react";
 
 const ZONES = ["ROOFTOP", "STREET", "THE CAVE"];
 
 /**
- * Slim scroll wayfinder on the left edge: an amber fill tracks your descent
- * through the city, with the current "elevation" lit. Desktop only.
+ * Slim scroll wayfinder on the left edge: each leg between elevations fills
+ * over ITS OWN slice of the descent (0–50%, then 50–100%), with the current
+ * "elevation" lit. Desktop only.
  */
 export default function DescentMeter() {
   const { scrollYProgress } = useScroll();
-  const fill = useSpring(scrollYProgress, { stiffness: 120, damping: 30 });
+  const leg1 = useSpring(useTransform(scrollYProgress, [0, 0.5], [0, 1]), {
+    stiffness: 120,
+    damping: 30,
+  });
+  const leg2 = useSpring(useTransform(scrollYProgress, [0.5, 1], [0, 1]), {
+    stiffness: 120,
+    damping: 30,
+  });
+  const legs = [leg1, leg2];
   const [zone, setZone] = useState(0);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
@@ -33,13 +43,9 @@ export default function DescentMeter() {
         <div key={label} className="flex flex-col items-center gap-4">
           {i > 0 && (
             <div className="relative h-24 w-px overflow-hidden bg-slate/60">
-              {/* fill segment: lit once progress passes this leg */}
               <motion.div
-                className="absolute inset-x-0 top-0 origin-top bg-signal"
-                style={{
-                  height: "100%",
-                  scaleY: fill,
-                }}
+                className="absolute inset-x-0 top-0 h-full origin-top bg-signal"
+                style={{ scaleY: legs[i - 1] }}
               />
             </div>
           )}

@@ -8,7 +8,10 @@ import CaseCard from "./CaseCard";
 /** Selected work as a descent through the city — parallax skylines behind case files. */
 export default function Work() {
   return (
-    <section id="work" className="relative overflow-hidden py-28">
+    <section
+      id="work"
+      className="relative overflow-hidden border-t border-slate/40 py-28"
+    >
       {/* parallax skyline layers — the descent */}
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full">
         <Parallax speed={-40} className="absolute inset-x-0 top-10">

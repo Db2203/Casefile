@@ -9,43 +9,54 @@ import {
   type ReactNode,
 } from "react";
 
-export type CursorVariant = "default" | "link" | "case" | "text" | "hidden";
+export type CursorVariant = "default" | "link" | "case" | "hidden";
 
-interface CursorState {
+/**
+ * Split contexts: zones only consume the STABLE actions (so hovering one card
+ * never re-renders the other ~10 zones); only CustomCursor subscribes to the
+ * changing variant state.
+ */
+interface CursorStateValue {
   variant: CursorVariant;
   label: string;
+}
+interface CursorActionsValue {
   set: (variant: CursorVariant, label?: string) => void;
   reset: () => void;
 }
 
-const CursorContext = createContext<CursorState>({
+const CursorStateContext = createContext<CursorStateValue>({
   variant: "default",
   label: "",
+});
+const CursorActionsContext = createContext<CursorActionsValue>({
   set: () => {},
   reset: () => {},
 });
 
-export const useCursor = () => useContext(CursorContext);
+export const useCursorState = () => useContext(CursorStateContext);
+export const useCursorActions = () => useContext(CursorActionsContext);
 
 export function CursorProvider({ children }: { children: ReactNode }) {
-  const [variant, setVariant] = useState<CursorVariant>("default");
-  const [label, setLabel] = useState("");
+  const [state, setState] = useState<CursorStateValue>({
+    variant: "default",
+    label: "",
+  });
 
-  const set = useCallback((v: CursorVariant, l = "") => {
-    setVariant(v);
-    setLabel(l);
+  const set = useCallback((variant: CursorVariant, label = "") => {
+    setState({ variant, label });
   }, []);
   const reset = useCallback(() => {
-    setVariant("default");
-    setLabel("");
+    setState({ variant: "default", label: "" });
   }, []);
 
-  const value = useMemo(
-    () => ({ variant, label, set, reset }),
-    [variant, label, set, reset],
-  );
+  const actions = useMemo(() => ({ set, reset }), [set, reset]);
 
   return (
-    <CursorContext.Provider value={value}>{children}</CursorContext.Provider>
+    <CursorActionsContext.Provider value={actions}>
+      <CursorStateContext.Provider value={state}>
+        {children}
+      </CursorStateContext.Provider>
+    </CursorActionsContext.Provider>
   );
 }

@@ -27,6 +27,10 @@ export default function DetectiveMode() {
 
   return (
     <>
+      {/* announce toggles to assistive tech */}
+      <span className="sr-only" role="status" aria-live="polite">
+        {detectiveMode ? "Detective mode on" : "Detective mode off"}
+      </span>
       <AnimatePresence>
         {detectiveMode && (
           <motion.div

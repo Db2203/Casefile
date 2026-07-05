@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   animate,
   motion,
@@ -11,7 +11,7 @@ import {
 import { bindPointer, pointerX, pointerY } from "@/components/cursor/pointer";
 import { useMediaPreferences } from "@/lib/useMediaPreferences";
 import { useNoir } from "@/lib/store";
-import { hero, profile } from "@/lib/content";
+import { hero } from "@/lib/content";
 import BatMark from "@/components/atmosphere/BatMark";
 import { SkylineFar, SkylineNear } from "@/components/atmosphere/Skyline";
 import Annotation from "@/components/detective/Annotation";
@@ -21,26 +21,47 @@ import Annotation from "@/components/detective/Annotation";
  * The hero renders fully lit; on capable devices a near-black shroud with a
  * flashlight hole covers it. After the boot, the beam runs ONE slow sweep
  * across the headline (so it's guaranteed to be read), then hands control to
- * the cursor. Hold the mouse down to widen the beam. "LIGHTS ON" opts out.
+ * the cursor. Hold the mouse down to widen the beam. "LIGHTS ON" opts out
+ * (state lives in the store so the command palette can toggle it too).
  *
- * Perf: the shroud is a huge gradient layer moved with transform only
- * (composite-only — no per-frame gradient repaint). The hole radius is
- * animated by scaling the layer.
- *
- * Mobile / reduced-motion / SSR / crawlers: no shroud — fully lit, real HTML.
+ * Perf: the shroud is a large gradient layer moved with transform only
+ * (composite-only — no per-frame gradient repaint); hole radius animates by
+ * scaling the layer. Mobile / reduced-motion / SSR: no shroud, fully lit.
  */
 
-// Gradient hole base radius in px at scale=1; effective radius = scale * R.
-const HOLE_R = 400;
-const REST_SCALE = 0.5; // ~200px beam
-const WIDE_SCALE = 1.05; // while pointer held
-const SWEEP_SCALE = 0.68; // during the intro sweep
+// Gradient hole radius in px at scale=1; effective radius = scale * R.
+const HOLE_R = 200;
+const REST_SCALE = 1.0; // ~200px beam
+const WIDE_SCALE = 2.1; // while pointer held
+const SWEEP_SCALE = 1.36; // during the intro sweep
+
+// Module-scope session flags: survive re-mounts, and act as the fallback when
+// sessionStorage is unavailable (privacy modes must still get the sweep once).
+let sweptFallback = false;
+let shroudShownOnce = false;
+
+function readSwept(): boolean {
+  try {
+    return sessionStorage.getItem("noir-sweep") === "1" || sweptFallback;
+  } catch {
+    return sweptFallback;
+  }
+}
+function markSwept() {
+  sweptFallback = true;
+  try {
+    sessionStorage.setItem("noir-sweep", "1");
+  } catch {
+    /* ignore */
+  }
+}
 
 export default function Hero() {
   const { canEnhance } = useMediaPreferences();
   const reduced = useReducedMotion();
   const bootDone = useNoir((s) => s.bootDone);
-  const [lightsOn, setLightsOn] = useState(false);
+  const lightsOn = useNoir((s) => s.lightsOn);
+  const toggleLights = useNoir((s) => s.toggleLights);
 
   // Light target (set by sweep choreography, then by the pointer).
   const tx = useMotionValue(-600);
@@ -51,13 +72,18 @@ export default function Hero() {
   const s = useSpring(tScale, { stiffness: 160, damping: 26 });
 
   const flashlightActive = canEnhance && !lightsOn;
+  // Captured at render: first-ever shroud mount gets the slow cinematic fade,
+  // re-mounts (LIGHTS toggling) get a quick one.
+  const quickFade = shroudShownOnce;
 
   useEffect(() => {
     if (!flashlightActive) return;
+    shroudShownOnce = true;
 
     const unbindPointer = bindPointer();
     const subs: (() => void)[] = [() => unbindPointer()];
     let handedOver = false;
+    let sweepStarted = false;
 
     const handOverToPointer = () => {
       if (handedOver) return;
@@ -85,27 +111,14 @@ export default function Hero() {
 
     // One cinematic sweep across the headline per session; any pointer
     // movement cancels it and gives the visitor the light immediately.
-    let swept = true;
-    try {
-      swept = sessionStorage.getItem("noir-sweep") === "1";
-    } catch {
-      /* ignore */
-    }
-
-    if (swept || !bootDone) {
+    if (readSwept() || !bootDone) {
       if (bootDone) handOverToPointer();
       return () => subs.forEach((fn) => fn());
     }
 
     const w = window.innerWidth;
     const h = window.innerHeight;
-    const markSwept = () => {
-      try {
-        sessionStorage.setItem("noir-sweep", "1");
-      } catch {
-        /* ignore */
-      }
-    };
+    sweepStarted = true;
 
     tx.set(w * 0.04);
     ty.set(h * 0.34);
@@ -134,6 +147,8 @@ export default function Hero() {
       window.removeEventListener("pointermove", cancelSweep);
       sweepX.stop();
       sweepY.stop();
+      // LIGHTS ON (or unmount) mid-sweep counts as seen — never restart it.
+      if (sweepStarted) markSwept();
     });
 
     return () => subs.forEach((fn) => fn());
@@ -142,9 +157,10 @@ export default function Hero() {
   const show = bootDone || reduced;
 
   return (
-    <header
+    <section
       id="top"
-      className="relative flex min-h-screen flex-col justify-between overflow-hidden"
+      aria-label="Intro"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden"
     >
       {/* ── lit scene (under the shroud) ─────────────────────────── */}
 
@@ -168,25 +184,8 @@ export default function Hero() {
         style={{ animationDelay: "-14s" }}
       />
 
-      {/* top bar — above the shroud so it's always readable */}
-      <div className="relative z-40 flex flex-wrap items-center justify-between gap-y-3 px-6 pt-6 font-mono text-[10px] tracking-[0.3em] text-ash sm:px-10">
-        <span className="text-bone">{profile.name.toUpperCase()}</span>
-        <span className="stamp order-2 text-signal md:order-3">
-          {profile.status}
-        </span>
-        <nav
-          className="order-3 flex w-full justify-center gap-5 md:order-2 md:w-auto md:gap-7"
-          aria-label="Sections"
-        >
-          <a href="#work" className="link-wipe">CASES</a>
-          <a href="#about" className="link-wipe">DOSSIER</a>
-          <a href="#playground" className="link-wipe">WORKSHOP</a>
-          <a href="#contact" className="link-wipe">SIGNAL</a>
-        </nav>
-      </div>
-
       {/* headline block */}
-      <div className="relative z-10 px-6 pb-40 pt-10 sm:px-10">
+      <div className="relative z-10 px-6 pb-24 pt-28 sm:px-10">
         <motion.p
           initial={reduced ? false : { opacity: 0, y: 14 }}
           animate={show ? { opacity: 1, y: 0 } : {}}
@@ -237,9 +236,15 @@ export default function Hero() {
           className="absolute inset-0 z-30 overflow-hidden"
           initial={{ opacity: 0 }}
           animate={{ opacity: show ? 1 : 0 }}
-          transition={{ duration: 1.2, delay: 0.7 }}
+          transition={
+            quickFade
+              ? { duration: 0.35 }
+              : { duration: 1.2, delay: 0.7 }
+          }
         >
-          {/* huge gradient layer moved with transform only (composite-only) */}
+          {/* large gradient layer moved with transform only (composite-only);
+              at REST_SCALE=1 the 260vmax layer still covers the viewport
+              diagonal (≈1.15·vmax) with the hole at any corner */}
           <motion.div
             className="absolute left-0 top-0"
             style={{
@@ -248,10 +253,8 @@ export default function Hero() {
               scale: s,
               translateX: "-50%",
               translateY: "-50%",
-              // big enough that even at REST_SCALE (0.5) the layer covers the
-              // viewport diagonal with the hole at any corner, incl. 4K
-              width: "500vmax",
-              height: "500vmax",
+              width: "260vmax",
+              height: "260vmax",
               willChange: "transform",
               backgroundImage: `radial-gradient(circle ${HOLE_R}px at center, transparent 0%, rgba(5,5,7,0.55) 45%, rgba(5,5,7,0.8) 80%, rgba(5,5,7,0.8) 100%)`,
             }}
@@ -266,13 +269,13 @@ export default function Hero() {
         </p>
         {canEnhance && (
           <button
-            onClick={() => setLightsOn((v) => !v)}
+            onClick={toggleLights}
             className="rounded-sm border border-slate bg-void/60 px-3 py-2 font-mono text-[10px] tracking-[0.25em] text-ash backdrop-blur transition-colors hover:border-signal hover:text-signal"
           >
             {lightsOn ? "LIGHTS OFF" : "LIGHTS ON"}
           </button>
         )}
       </div>
-    </header>
+    </section>
   );
 }

@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion, useSpring } from "motion/react";
 import { bindPointer, pointerX, pointerY } from "./pointer";
-import { useCursor } from "./CursorProvider";
+import { useCursorState } from "./CursorProvider";
 
 /**
  * Two fixed elements driven entirely by springs off the shared pointer
@@ -13,7 +13,7 @@ import { useCursor } from "./CursorProvider";
  * Mount this ONLY when `canEnhance` is true (SiteShell gates it).
  */
 export default function CustomCursor() {
-  const { variant, label } = useCursor();
+  const { variant, label } = useCursorState();
 
   // Tight spring — the dot.
   const dotX = useSpring(pointerX, { stiffness: 900, damping: 55, mass: 0.3 });
@@ -35,7 +35,6 @@ export default function CustomCursor() {
     default: { width: 36, height: 36, opacity: 0.55 },
     link: { width: 56, height: 56, opacity: 0.9 },
     case: { width: 92, height: 92, opacity: 1 },
-    text: { width: 2, height: 28, opacity: 0.8 },
     hidden: { width: 0, height: 0, opacity: 0 },
   } as const;
 

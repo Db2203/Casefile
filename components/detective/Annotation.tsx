@@ -12,7 +12,7 @@ export default function Annotation({
   id,
   className,
 }: {
-  id: keyof typeof annotations | string;
+  id: keyof typeof annotations;
   className?: string;
 }) {
   const detectiveMode = useNoir((s) => s.detectiveMode);

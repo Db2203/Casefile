@@ -17,6 +17,7 @@ export default function KonamiEgg() {
   useEffect(() => {
     let wordBuf = "";
     let codeIdx = 0;
+    let timer: ReturnType<typeof setTimeout> | undefined;
 
     const onKey = (e: KeyboardEvent) => {
       const k = e.key.toLowerCase();
@@ -32,11 +33,15 @@ export default function KonamiEgg() {
         codeIdx = 0;
         wordBuf = "";
         setFired(true);
-        setTimeout(() => setFired(false), 4200);
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => setFired(false), 4200);
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -53,11 +58,7 @@ export default function KonamiEgg() {
           <div className="absolute inset-0 bg-[radial-gradient(60%_60%_at_50%_38%,rgba(245,178,26,0.16),transparent_70%)]" />
           {/* sweeping beam */}
           <motion.div
-            className="absolute bottom-[-20vh] left-1/2 h-[150vh] w-[40vw] -translate-x-1/2 origin-bottom"
-            style={{
-              background:
-                "conic-gradient(from 180deg at 50% 100%, transparent 42%, rgba(245,178,26,0.22) 50%, transparent 58%)",
-            }}
+            className="signal-beam absolute bottom-[-20vh] left-1/2 h-[150vh] w-[40vw] -translate-x-1/2 origin-bottom opacity-80"
             initial={{ rotate: -24 }}
             animate={{ rotate: [-24, 14, -6, 0] }}
             transition={{ duration: 2.2, ease: "easeInOut" }}

@@ -9,7 +9,7 @@ import BatMark from "./BatMark";
 /**
  * One-shot ignition: a beam of amber light sweeps up and "lights" the night
  * mark in fog, then dissolves into the hero. Session-gated, skippable by
- * click or any key. SiteShell skips mounting it entirely for reduced motion.
+ * click or any key. Reduced-motion is handled INTERNALLY (skips instantly).
  */
 export default function BootSequence() {
   const setBootDone = useNoir((s) => s.setBootDone);
@@ -69,11 +69,7 @@ export default function BootSequence() {
         >
           {/* rising beam */}
           <motion.div
-            className="absolute bottom-0 left-1/2 h-[140vh] w-[46vw] -translate-x-1/2 origin-bottom"
-            style={{
-              background:
-                "conic-gradient(from 180deg at 50% 100%, transparent 41%, rgba(245,178,26,0.16) 48%, rgba(255,210,74,0.28) 50%, rgba(245,178,26,0.16) 52%, transparent 59%)",
-            }}
+            className="signal-beam absolute bottom-0 left-1/2 h-[140vh] w-[46vw] -translate-x-1/2 origin-bottom"
             initial={{ opacity: 0, scaleY: 0.2 }}
             animate={{ opacity: 1, scaleY: 1 }}
             transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}

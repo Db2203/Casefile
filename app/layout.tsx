@@ -1,7 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Anton, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { profile } from "@/lib/content";
+import { profile, siteUrl } from "@/lib/content";
+import { BatSymbol } from "@/components/atmosphere/BatMark";
 
 const anton = Anton({
   variable: "--font-anton",
@@ -21,8 +22,6 @@ const jbmono = JetBrains_Mono({
   subsets: ["latin"],
   display: "swap",
 });
-
-const siteUrl = "https://example.com"; // [PLACEHOLDER] set your deployed URL
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -78,6 +77,7 @@ export default function RootLayout({
       className={`${anton.variable} ${grotesk.variable} ${jbmono.variable}`}
     >
       <body>
+        <BatSymbol />
         {/* No-JS safety net: entrance animations SSR with opacity 0 — force
             everything visible when JavaScript is unavailable. */}
         <noscript>

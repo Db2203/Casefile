@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-
-const siteUrl = "https://example.com"; // [PLACEHOLDER] set your deployed URL
+import { siteUrl } from "@/lib/content";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

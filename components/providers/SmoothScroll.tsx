@@ -3,6 +3,7 @@
 import { useEffect, useRef, type ReactNode } from "react";
 import { ReactLenis, type LenisRef } from "lenis/react";
 import { cancelFrame, frame } from "motion/react";
+import { registerLenis } from "@/lib/scroll";
 
 /**
  * Lenis inertial scroll, driven by Framer Motion's frame loop so the page
@@ -24,7 +25,12 @@ export default function SmoothScroll({
       lenisRef.current?.lenis?.raf(data.timestamp);
     }
     frame.update(update, true);
-    return () => cancelFrame(update);
+    // expose the instance to root-level overlays (palette) via lib/scroll
+    registerLenis(lenisRef.current?.lenis ?? null);
+    return () => {
+      cancelFrame(update);
+      registerLenis(null);
+    };
   }, [enabled]);
 
   if (!enabled) return <>{children}</>;

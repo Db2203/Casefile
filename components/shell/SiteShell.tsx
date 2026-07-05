@@ -26,8 +26,9 @@ export default function SiteShell({ children }: { children: ReactNode }) {
     <CursorProvider>
       <SmoothScroll enabled={canEnhance}>{children}</SmoothScroll>
 
-      {/* atmosphere — fixed, root-level siblings */}
-      {canEnhance && <RainCanvas />}
+      {/* atmosphere — fixed, root-level siblings. Weather is NOT pointer-
+          dependent: phones get rain too (only reduced-motion opts out). */}
+      {!prefersReducedMotion && <RainCanvas />}
       {canEnhance && <DescentMeter />}
       {!prefersReducedMotion && <div className="grain-layer" aria-hidden />}
       <div className="vignette-layer" aria-hidden />

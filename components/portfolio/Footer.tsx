@@ -11,7 +11,7 @@ export default function Footer() {
           BUILT AFTER DARK
         </span>
         <LiveClock />
-        <span className="text-ash/60">
+        <span className="text-ash/75">
           PRESS <span className="text-signal">D</span> TO SCAN · THE REST IS
           CLASSIFIED
         </span>

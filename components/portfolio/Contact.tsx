@@ -15,11 +15,7 @@ export default function Contact() {
       {/* the beam behind the CTA */}
       <div
         aria-hidden
-        className="pointer-events-none absolute bottom-0 left-1/2 h-[80vh] w-[44vw] -translate-x-1/2"
-        style={{
-          background:
-            "conic-gradient(from 180deg at 50% 100%, transparent 43%, rgba(245,178,26,0.07) 48%, rgba(255,210,74,0.13) 50%, rgba(245,178,26,0.07) 52%, transparent 57%)",
-        }}
+        className="signal-beam pointer-events-none absolute bottom-0 left-1/2 h-[80vh] w-[44vw] -translate-x-1/2 opacity-50"
       />
 
       <div className="relative mx-auto max-w-6xl px-6 text-center sm:px-10">

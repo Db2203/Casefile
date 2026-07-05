@@ -6,7 +6,10 @@ import Annotation from "@/components/detective/Annotation";
 /** R&D — the workshop. Prototypes on blueprint-grid cards. */
 export default function Playground() {
   return (
-    <section id="playground" className="relative py-28">
+    <section
+      id="playground"
+      className="relative border-t border-slate/40 py-28"
+    >
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">

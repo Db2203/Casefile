@@ -21,9 +21,9 @@ export default function RainCanvas() {
     let drops: { x: number; y: number; len: number; speed: number; o: number }[] =
       [];
 
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-
     const resize = () => {
+      // read DPR here so moving to a different-DPR monitor re-sharpens
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);

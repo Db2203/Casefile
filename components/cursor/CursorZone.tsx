@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useCursor, type CursorVariant } from "./CursorProvider";
+import { useCursorActions, type CursorVariant } from "./CursorProvider";
 
 /**
  * Declarative cursor-variant region: wrap any element and the custom cursor
@@ -18,7 +18,7 @@ export default function CursorZone({
   className?: string;
   children: ReactNode;
 }) {
-  const { set, reset } = useCursor();
+  const { set, reset } = useCursorActions();
   return (
     <div
       className={className}

@@ -168,6 +168,18 @@ body.cursor-none * {
   78% { opacity: 0.9; }
 }
 
+/* Amber signal beam — single source for boot / contact / easter egg. */
+.signal-beam {
+  background: conic-gradient(
+    from 180deg at 50% 100%,
+    transparent 41%,
+    rgba(245, 178, 26, 0.16) 48%,
+    rgba(255, 210, 74, 0.28) 50%,
+    rgba(245, 178, 26, 0.16) 52%,
+    transparent 59%
+  );
+}
+
 /* Dossier stamp. */
 .stamp {
   display: inline-block;

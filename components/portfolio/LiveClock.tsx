@@ -12,8 +12,17 @@ export default function LiveClock() {
 
   useEffect(() => {
     setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(id);
+    // Align updates to the minute boundary — accurate and cheapest.
+    let interval: ReturnType<typeof setInterval> | undefined;
+    const untilNextMinute = 60_000 - (Date.now() % 60_000) + 50;
+    const timeout = setTimeout(() => {
+      setNow(new Date());
+      interval = setInterval(() => setNow(new Date()), 60_000);
+    }, untilNextMinute);
+    return () => {
+      clearTimeout(timeout);
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
   if (!now) return <span aria-hidden className="inline-block w-44" />;

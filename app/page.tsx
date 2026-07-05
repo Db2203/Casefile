@@ -1,4 +1,5 @@
 import SiteShell from "@/components/shell/SiteShell";
+import TopBar from "@/components/portfolio/TopBar";
 import Hero from "@/components/portfolio/Hero";
 import Work from "@/components/portfolio/Work";
 import About from "@/components/portfolio/About";
@@ -14,6 +15,7 @@ export default function Home() {
       <a href="#main" className="skip-link">
         Skip to content
       </a>
+      <TopBar />
       <main id="main">
         <Hero />
         <Work />
