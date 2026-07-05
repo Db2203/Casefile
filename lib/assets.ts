@@ -29,7 +29,12 @@ export function evidenceImage(
 }
 
 export function dossierPdfUrl(): string | null {
-  return existsSync(path.join(process.cwd(), "public", "dossier.pdf"))
-    ? "/dossier.pdf"
-    : null;
+  // Preferred: an externally-hosted CV (Vercel Blob / Drive) via env var —
+  // the PDF never enters the public repo. Fallback: a local public/dossier.pdf.
+  return (
+    process.env.NEXT_PUBLIC_DOSSIER_URL ??
+    (existsSync(path.join(process.cwd(), "public", "dossier.pdf"))
+      ? "/dossier.pdf"
+      : null)
+  );
 }

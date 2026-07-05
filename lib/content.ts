@@ -33,10 +33,10 @@ export const profile = {
       label: "LinkedIn",
       href: process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
     },
-    {
-      label: "Read.cv",
-      href: process.env.NEXT_PUBLIC_READCV_URL ?? "https://read.cv",
-    },
+    // CV hosted OUTSIDE the repo (Vercel Blob / Drive) — appears when set
+    ...(process.env.NEXT_PUBLIC_DOSSIER_URL
+      ? [{ label: "Dossier (PDF)", href: process.env.NEXT_PUBLIC_DOSSIER_URL }]
+      : []),
   ],
 };
 

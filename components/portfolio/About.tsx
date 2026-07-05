@@ -43,10 +43,15 @@ export default function About() {
             {dossier && (
               <a
                 href={dossier}
-                download
+                // same-origin file → download; external host (Blob/Drive) →
+                // open the browser's PDF viewer (download attr is ignored
+                // cross-origin anyway)
+                {...(dossier.startsWith("/")
+                  ? { download: true }
+                  : { target: "_blank", rel: "noopener noreferrer" })}
                 className="mt-8 inline-block border border-signal/60 bg-signal/5 px-5 py-3 font-mono text-[11px] tracking-[0.25em] text-signal transition-colors hover:bg-signal hover:text-void"
               >
-                FULL DOSSIER (PDF) ↓
+                FULL DOSSIER (PDF) {dossier.startsWith("/") ? "↓" : "↗"}
               </a>
             )}
           </Reveal>
