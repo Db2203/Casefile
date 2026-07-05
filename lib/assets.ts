@@ -32,7 +32,7 @@ export function dossierPdfUrl(): string | null {
   // Preferred: an externally-hosted CV (Vercel Blob / Drive) via env var —
   // the PDF never enters the public repo. Fallback: a local public/dossier.pdf.
   return (
-    process.env.NEXT_PUBLIC_DOSSIER_URL ??
+    process.env.NEXT_PUBLIC_DOSSIER_URL || // `||`: empty-string env counts as unset
     (existsSync(path.join(process.cwd(), "public", "dossier.pdf"))
       ? "/dossier.pdf"
       : null)

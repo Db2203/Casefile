@@ -21,17 +21,17 @@ export const siteUrl = "https://casefile-bay.vercel.app";
  * this keeps them out of the SOURCE, not off the page).
  */
 export const profile = {
-  name: process.env.NEXT_PUBLIC_OWNER_NAME ?? "Alex Rivera",
+  name: process.env.NEXT_PUBLIC_OWNER_NAME || "Alex Rivera",
   role: "Full-Stack Developer",
   tagline: "I build products that work the night shift.",
-  location: process.env.NEXT_PUBLIC_OWNER_LOCATION ?? "The City",
-  email: process.env.NEXT_PUBLIC_OWNER_EMAIL ?? "hello@example.com",
+  location: process.env.NEXT_PUBLIC_OWNER_LOCATION || "The City",
+  email: process.env.NEXT_PUBLIC_OWNER_EMAIL || "hello@example.com",
   status: "OPEN TO WORK", // shown as a dossier stamp
   socials: [
     { label: "GitHub", href: "https://github.com/Db2203" },
     {
       label: "LinkedIn",
-      href: process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
+      href: process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://linkedin.com",
     },
     // CV hosted OUTSIDE the repo (Vercel Blob / Drive) — appears when set
     ...(process.env.NEXT_PUBLIC_DOSSIER_URL

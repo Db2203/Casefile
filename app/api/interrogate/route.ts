@@ -12,7 +12,10 @@ import { buildSystemPrompt } from "@/lib/interrogation";
  *  - Groq's own free-tier limits as the final backstop
  */
 
-const MODEL = process.env.GROQ_MODEL ?? "llama-3.1-8b-instant";
+// 70B: strong instruction-following (keeps answers short + in character) and
+// 12k tokens/min free — daily cap ~100k tokens ≈ 80+ answers/day, plenty.
+// Set GROQ_MODEL=llama-3.1-8b-instant for 5× the daily quota at lower quality.
+const MODEL = process.env.GROQ_MODEL ?? "llama-3.3-70b-versatile";
 const MAX_TURNS = 8;
 const MAX_CHARS = 280;
 const WINDOW_MS = 60_000;
@@ -35,6 +38,21 @@ interface ChatMessage {
   role: "user" | "assistant";
   content: string;
 }
+
+// Cheap input-side jailbreak filter: obvious extraction attempts get the
+// in-character line WITHOUT spending model tokens.
+const INJECTION_RE =
+  /ignore\s+(all\s+)?(previous|prior|above|earlier)\s+instructions|system\s*prompt|reveal\s+your|repeat\s+(your|the)\s+(instructions|prompt|rules)|you\s+are\s+now|act\s+as\s+(if|a(?!n?\s*(recruiter|client)))|developer\s+mode/i;
+
+// Output-side guard: if the model gets tricked anyway, its dump starts with
+// recognizable prompt text — catch it in the first buffered chunk.
+const LEAK_MARKERS = [
+  "You are THE ARCHIVE",
+  "STYLE — STRICT",
+  "YOU KNOW ONLY THE RECORD",
+  "PLAIN TEXT ONLY",
+];
+const SEALED_LINE = "Nice try. The file stays sealed.";
 
 function sealed(text: string, status = 400) {
   return new Response(text, {
@@ -80,6 +98,10 @@ export async function POST(req: Request) {
     return sealed("THE ARCHIVE DIDN'T CATCH THAT.");
   }
 
+  if (INJECTION_RE.test(messages[messages.length - 1].content)) {
+    return sealed(SEALED_LINE, 200);
+  }
+
   const upstream = await fetch(
     "https://api.groq.com/openai/v1/chat/completions",
     {
@@ -94,7 +116,7 @@ export async function POST(req: Request) {
           { role: "system", content: buildSystemPrompt() },
           ...messages,
         ],
-        max_tokens: 350,
+        max_tokens: 260,
         temperature: 0.6,
         stream: true,
       }),
@@ -112,15 +134,35 @@ export async function POST(req: Request) {
   }
 
   // Transform Groq's SSE stream into plain text chunks for the client.
+  // The first ~120 chars are buffered and checked against LEAK_MARKERS so a
+  // successfully-jailbroken prompt dump never reaches the visitor.
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = "";
+  let head = "";
+  let headChecked = false;
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const reader = upstream.body!.getReader();
+      const emit = (token: string) => {
+        if (headChecked) {
+          controller.enqueue(encoder.encode(token));
+          return true;
+        }
+        head += token;
+        if (head.length < 120) return true;
+        headChecked = true;
+        if (LEAK_MARKERS.some((m) => head.includes(m))) {
+          controller.enqueue(encoder.encode(SEALED_LINE));
+          return false; // stop reading — the rest is the dump
+        }
+        controller.enqueue(encoder.encode(head));
+        return true;
+      };
+
       try {
-        for (;;) {
+        outer: for (;;) {
           const { done, value } = await reader.read();
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
@@ -136,10 +178,18 @@ export async function POST(req: Request) {
                 choices?: { delta?: { content?: string } }[];
               };
               const token = json.choices?.[0]?.delta?.content;
-              if (token) controller.enqueue(encoder.encode(token));
+              if (token && !emit(token)) break outer;
             } catch {
               /* partial line — ignored */
             }
+          }
+        }
+        // short answer that never hit 120 chars — flush it (after checking)
+        if (!headChecked && head) {
+          if (LEAK_MARKERS.some((m) => head.includes(m))) {
+            controller.enqueue(encoder.encode(SEALED_LINE));
+          } else {
+            controller.enqueue(encoder.encode(head));
           }
         }
       } finally {
