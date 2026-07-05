@@ -100,6 +100,14 @@ export default async function CasePage({
                   {tag}
                 </span>
               ))}
+              <a
+                href={project.repo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-wipe ml-2 font-mono text-[10px] tracking-widest text-ash"
+              >
+                VIEW CODE ↗
+              </a>
               {project.link && (
                 <a
                   href={project.link}
@@ -107,7 +115,7 @@ export default async function CasePage({
                   rel="noopener noreferrer"
                   className="link-wipe ml-2 font-mono text-[10px] tracking-widest text-signal"
                 >
-                  LIVE SITE ↗
+                  LIVE ↗
                 </a>
               )}
             </div>

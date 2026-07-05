@@ -125,7 +125,7 @@ export default function CaseCard({ project }: { project: Project }) {
             ))}
           </div>
 
-          <div className="mt-6 flex items-center gap-6">
+          <div className="mt-6 flex flex-wrap items-center gap-x-6 gap-y-2">
             <Link
               href={`/case/${project.id}`}
               className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-bone"
@@ -133,6 +133,15 @@ export default function CaseCard({ project }: { project: Project }) {
               OPEN CASE FILE ↗
               <span className="sr-only"> — {project.title}</span>
             </Link>
+            <a
+              href={project.repo}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-ash"
+            >
+              VIEW CODE ↗
+              <span className="sr-only"> — {project.title} on GitHub</span>
+            </a>
             {project.link && (
               <a
                 href={project.link}
@@ -140,7 +149,7 @@ export default function CaseCard({ project }: { project: Project }) {
                 rel="noopener noreferrer"
                 className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-signal"
               >
-                LIVE SITE ↗
+                LIVE ↗
               </a>
             )}
           </div>

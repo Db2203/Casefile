@@ -2,8 +2,9 @@
  * SINGLE SOURCE OF TRUTH for all portfolio content.
  * Consumed by every section, the case-study pages, and the SEO layer.
  *
- * 👉 To make this your own, edit the values below. Everything else updates
- *    automatically. Placeholder content is clearly marked with `[PLACEHOLDER]`.
+ * 👉 Fields marked [PLACEHOLDER] are personal info the owner will set.
+ *    Project data below is REAL — sourced from github.com/Db2203 READMEs.
+ *    Anything marked [VERIFY] should be double-checked/filled by the owner.
  *
  * Tone note: the site is themed as a noir "case archive" — copy leans on
  * the night / the city / the detective. Keep that voice when editing.
@@ -13,49 +14,48 @@ export const siteUrl = "https://example.com"; // [PLACEHOLDER] set your deployed
 
 export const profile = {
   name: "Alex Rivera", // [PLACEHOLDER]
-  role: "Designer & Developer",
-  tagline: "I build interfaces that work the night shift.",
+  role: "Full-Stack Developer",
+  tagline: "I build products that work the night shift.",
   location: "The City", // [PLACEHOLDER]
   email: "hello@example.com", // [PLACEHOLDER]
   status: "OPEN TO WORK", // shown as a dossier stamp
   socials: [
-    { label: "GitHub", href: "https://github.com" },
-    { label: "LinkedIn", href: "https://linkedin.com" },
-    { label: "Dribbble", href: "https://dribbble.com" },
-    { label: "Read.cv", href: "https://read.cv" },
+    { label: "GitHub", href: "https://github.com/Db2203" },
+    { label: "LinkedIn", href: "https://linkedin.com" }, // [PLACEHOLDER]
+    { label: "Read.cv", href: "https://read.cv" }, // [PLACEHOLDER]
   ],
 };
 
 export const hero = {
   kicker: "CASE ARCHIVE — CLASSIFIED",
   lines: ["EVERY GREAT", "BUILD STARTS", "IN THE DARK."],
-  sub: "Multidisciplinary designer–developer. I take fuzzy ideas, interrogate them, and ship interfaces with an alibi for every pixel.",
+  sub: "Full-stack developer and data wrangler. I take messy real-world problems, interrogate the data, and ship products with an alibi for every decision.",
   hint: "move the light to read · scroll to descend",
 };
 
 export const about = {
   heading: "SUBJECT DOSSIER",
   intro:
-    "Equal parts designer and engineer — the kind of suspect who sketches the interface and then writes the code that ships it.",
+    "Equal parts engineer and investigator — the kind of suspect who profiles half a million collision records in the morning and obsesses over a spring curve at night.",
   fields: [
     { label: "SUBJECT", value: "Alex Rivera" }, // [PLACEHOLDER]
-    { label: "KNOWN ALIASES", value: "The Designer. The Developer. Both." },
+    { label: "KNOWN ALIASES", value: "The Data Wrangler. The Full-Stack Builder." },
     { label: "LAST SEEN", value: "Shipping at 2:47 AM" },
-    { label: "MOTIVE", value: "Interfaces that feel alive" },
+    { label: "MOTIVE", value: "Real problems, measurable outcomes" },
   ],
   paragraphs: [
-    "Over the last few years I've helped startups and studios turn fuzzy ideas into products people actually enjoy using — brand systems, design languages, and the production React code that brings them to life.",
-    "I work the seams: the transitions, the micro-interactions, the performance budget that decides whether something feels premium or janky. Most of it happens after dark.",
+    "My work runs the stack top to bottom: ML pipelines over public datasets, FastAPI backends with real auth stories, distributed SQL under stampede load, and the React frontends that make it all usable. Most of it starts with a question nobody had a good answer for — how unsafe is the fast route home? can a drop be provably fair?",
+    "I also treat the frontend as a craft, not an afterthought. Exhibit A: this site — every texture is CSS or seeded SVG, every animation runs on one budgeted frame loop, and the whole case archive is server-rendered underneath the noir.",
   ],
   skills: [
-    "Product & UI Design",
-    "Design Systems",
-    "React / Next.js",
-    "TypeScript",
-    "WebGL / Canvas",
-    "Motion & Interaction",
-    "Brand & Art Direction",
-    "Prototyping",
+    "Python & ML Pipelines",
+    "React / Next.js / TypeScript",
+    "FastAPI & Flask",
+    "PostgreSQL · PostGIS · pgvector",
+    "Distributed SQL",
+    "LLM Integration",
+    "Docker & Self-Hosting",
+    "Motion & Interaction Craft",
   ],
 };
 
@@ -82,221 +82,222 @@ export type Project = {
   summary: string;
   description: string;
   tags: string[];
-  /** Optional EXTERNAL link (live site) — internal case page is /case/[id]. */
+  /** GitHub repository (VIEW CODE ↗). */
+  repo: string;
+  /** Optional LIVE deployment URL (LIVE ↗). */
   link?: string;
-  status: string; // dossier stamp, e.g. "CLOSED — SHIPPED"
+  status: string; // dossier stamp
   caseStudy: CaseStudy;
 };
 
 export const projects: Project[] = [
   {
-    id: "aurora",
+    id: "saferoute",
     caseNo: "001",
-    title: "AURORA", // [PLACEHOLDER]
+    title: "SAFEROUTE",
     year: "2026",
-    category: "Product Design + Build",
+    category: "Geospatial ML + Full-Stack",
     summary:
-      "A scheduling tool felt slow and confusing — redesigned the core flow and cut time-to-book by 40%.",
+      "The fast route home hides its danger — an ML pipeline over 123,576 London collisions puts a number on it: 62% less risk for 19 extra minutes.",
     description:
-      "Led design and front-end for Aurora's booking experience. Rebuilt the calendar interaction model, introduced an optimistic-UI booking flow, and shipped a design system the team now reuses across the product.",
-    tags: ["Next.js", "Design System", "UX"],
-    status: "CLOSED — SHIPPED",
+      "Safety-aware navigation for London. Five years of UK STATS19 collision data become per-segment risk scores, and a modified Dijkstra offers the fastest and the safest route side by side — with the trade-off quantified.",
+    tags: ["Python / scikit-learn", "PostGIS", "Next.js + Leaflet"],
+    repo: "https://github.com/Db2203/saferoute",
+    status: "CASE CLOSED",
     caseStudy: {
-      // [PLACEHOLDER] — replace with the real story
       context:
-        "Aurora is a scheduling platform used by service businesses to manage thousands of bookings a week. Their team came to me after churn interviews kept surfacing the same phrase: 'booking feels like paperwork.'",
+        "Every navigation app optimizes for time. None of them will tell you that the ten-minutes-faster route runs through some of the most collision-dense streets in London. The data to answer that question exists — the UK publishes every police-recorded collision as open STATS19 data — it just wasn't wired into routing.",
       problem:
-        "The booking flow took nine screens and forty seconds on a good day. Every interaction round-tripped to the server before the UI responded, and the calendar hid availability behind three taps. Users weren't leaving because of missing features — they were leaving because the product felt slow.",
+        "Turn five years of raw collision records into something a router can reason about: which road segments are actually dangerous, in what conditions, and what does a rider give up by avoiding them? The answer has to be a route, not a heat map.",
       investigation: [
         {
-          label: "WEEK 01",
-          title: "Shadowed real bookings",
+          label: "EVIDENCE",
+          title: "Profiled half a million collisions",
           detail:
-            "Watched 14 session recordings and sat with 5 users. Mapped every hesitation to a screen. The calendar was the crime scene: 60% of abandonments happened there.",
+            "Ingested 503k UK collision records and cut them down to 123,576 geocoded London incidents. Built the city as a graph with OSMnx: 165,716 nodes, 381,109 edges.",
         },
         {
-          label: "WEEK 02",
-          title: "Prototyped three suspects",
+          label: "ANALYSIS",
+          title: "Found where the city bites",
           detail:
-            "Built three interaction models as working prototypes — inline week view, drag-to-book, and a two-panel availability map. Tested with 8 users; the two-panel model won on every metric.",
+            "DBSCAN clustering surfaced 1,863 collision hotspots. A 200-tree Random Forest learned severity from context — weather, light, road type — and 64,652 road segments got individual risk scores.",
         },
         {
-          label: "WEEK 03-05",
-          title: "Rebuilt the flow",
+          label: "THE ROUTE",
+          title: "Made risk a routing cost",
           detail:
-            "Shipped the new calendar with optimistic UI — bookings confirm instantly and reconcile in the background. Cut the flow from nine screens to three.",
-        },
-        {
-          label: "WEEK 06",
-          title: "Systemized it",
-          detail:
-            "Extracted the components into a documented design system the team now uses across the product — tokens, primitives, and motion rules.",
+            "Modified Dijkstra with a tunable risk/time weight, served by FastAPI over PostGIS. A Next.js + Leaflet frontend draws the fastest and safest routes side by side with the trade-off stated plainly.",
         },
       ],
       resolution:
-        "The redesigned flow shipped behind a feature flag, beat the old flow in a two-week A/B, and rolled out to 100% of users. The design system became the team's default vocabulary.",
+        "The system answers the question no map app would: 'how much safety does speed cost?' A typical result — 62% lower collision-risk exposure for 19 extra minutes — turns an invisible gamble into an informed choice.",
       evidence: [
-        { id: "flow", kind: "ui", caption: "The three-screen booking flow" },
-        { id: "system", kind: "blueprint", caption: "Design system tokens & primitives" },
-        { id: "metrics", kind: "graph", caption: "A/B test — time-to-book curve" },
+        { id: "map", kind: "skyline", caption: "Fastest vs safest, side by side" },
+        { id: "risk", kind: "graph", caption: "Per-segment risk scoring" },
+        { id: "pipeline", kind: "blueprint", caption: "STATS19 → PostGIS pipeline" },
       ],
       impact: [
-        { value: "-40%", label: "TIME TO BOOK" },
-        { value: "3", label: "SCREENS (WAS 9)" },
-        { value: "+18%", label: "COMPLETED BOOKINGS" },
+        { value: "123,576", label: "COLLISIONS ANALYZED" },
+        { value: "1,863", label: "HOTSPOTS MAPPED" },
+        { value: "-62%", label: "RISK, FOR +19 MIN" },
       ],
     },
   },
   {
-    id: "monolith",
+    id: "noscalp",
     caseNo: "002",
-    title: "MONOLITH", // [PLACEHOLDER]
-    year: "2025",
-    category: "Brand + Web",
+    title: "NOSCALP",
+    year: "2026",
+    category: "Distributed Systems + Web",
     summary:
-      "A studio needed a site that proved its craft — built an award-style interactive showcase.",
+      "Bots win hyped drops and scalpers resell them — a lottery backed by database invariants held allocation at exactly 100/100 under a 50,000-request stampede.",
     description:
-      "End-to-end identity and an interactive, scroll-driven site for a design studio. Custom shaders, choreographed page transitions, and a CMS the team can actually maintain.",
-    tags: ["Three.js", "Brand", "Motion"],
-    status: "CLOSED — AWARDED",
+      "A provably-fair limited-drops platform (hackathon build, live on Vercel). Fairness isn't a rate-limiter bolted on top — it's enforced as invariants in multi-region Amazon Aurora DSQL: one entry per verified human, exactly-once allocation, overselling structurally impossible.",
+    tags: ["TypeScript", "Aurora DSQL", "Multi-Region"],
+    repo: "https://github.com/Db2203/NoScalp",
+    link: "https://no-scalp.vercel.app",
+    status: "LIVE — HACKATHON BUILD",
     caseStudy: {
       context:
-        "Monolith, a five-person design studio, had a portfolio that undersold them — a template site showing custom work. They needed the site itself to be the proof.",
+        "Built for the 'H0: Hack the Zero Stack' hackathon. Limited drops — concert tickets, sneakers — are decided by whoever has the fastest bots, and first-come-first-served rewards exactly the behavior everyone hates. The premise: stop trying to out-race the bots and change the game itself.",
       problem:
-        "Every studio site claims craft; almost none demonstrate it. The brief was a site that IS the case study: real-time graphics, choreographed motion, and zero jank — while staying maintainable by non-engineers after handoff.",
+        "Design a drop where fairness is a guarantee, not a promise: a random lottery instead of a race, one entry per verified human even against duplicate accounts, and inventory that cannot oversell — even when the whole internet shows up at once, across regions.",
       investigation: [
-        {
-          label: "PHASE 01",
-          title: "Identity first",
-          detail:
-            "Built the brand system — a brutalist grid, a two-face type pairing, and a signature ink-displacement motif that would drive the shader work.",
-        },
-        {
-          label: "PHASE 02",
-          title: "Shader R&D",
-          detail:
-            "Prototyped the displacement effect in isolation: a fragment shader driven by scroll velocity, budgeted to 3ms a frame on mid-tier hardware.",
-        },
-        {
-          label: "PHASE 03",
-          title: "The build",
-          detail:
-            "Scroll-driven scenes with choreographed transitions between case studies, content wired to a headless CMS with live preview.",
-        },
-      ],
-      resolution:
-        "Launched to front-page features on two design galleries. The studio reports the site now opens their sales calls for them.",
-      evidence: [
-        { id: "identity", kind: "blueprint", caption: "Identity system & grid" },
-        { id: "scenes", kind: "skyline", caption: "Scroll-scene storyboard" },
-        { id: "perf", kind: "graph", caption: "Frame-time budget audit" },
-      ],
-      impact: [
-        { value: "2×", label: "GALLERY FEATURES" },
-        { value: "60fps", label: "MID-TIER HARDWARE" },
-        { value: "+35%", label: "INBOUND LEADS" },
-      ],
-    },
-  },
-  {
-    id: "pulse",
-    caseNo: "003",
-    title: "PULSE", // [PLACEHOLDER]
-    year: "2025",
-    category: "Data Visualization",
-    summary:
-      "Turned a dense analytics dashboard into a glanceable, real-time story.",
-    description:
-      "Designed and engineered a real-time data-viz layer for a fintech dashboard — streaming charts, smart empty states, and an accessibility pass that took it from WCAG fails to AA.",
-    tags: ["D3", "React", "A11y"],
-    status: "CLOSED — SHIPPED",
-    caseStudy: {
-      context:
-        "Pulse is a fintech ops dashboard watched by analysts for hours a day. It technically had all the data — in eleven tables and a wall of numbers that updated every second.",
-      problem:
-        "Analysts were exporting to spreadsheets to understand their own dashboard. Real-time updates caused constant reflow, nothing indicated WHAT changed, and the whole surface failed WCAG contrast checks.",
-      investigation: [
-        {
-          label: "AUDIT",
-          title: "Instrumented the pain",
-          detail:
-            "Heat-mapped attention with the analysts: 80% of glances hit 4 of the 11 tables. Everything else was noise they'd learned to ignore.",
-        },
         {
           label: "DESIGN",
-          title: "Glanceable hierarchy",
+          title: "Fairness as schema, not middleware",
           detail:
-            "Led with deltas, not values — sparklines and change-chips that answer 'what moved?' before 'what is it?'. Reserved motion strictly for meaning.",
+            "Inventory modeled as one row per unit — no hot counter to corrupt. Entry dedup via uuidv5-derived primary keys and an HMAC identity index, so a duplicate entry isn't rejected by logic, it's impossible by key.",
         },
         {
-          label: "BUILD",
-          title: "Streaming without reflow",
+          label: "INFRA",
+          title: "Multi-region, active-active",
           detail:
-            "Canvas-rendered chart layer over a stable DOM grid; updates batch on animation frames. An accessibility pass rebuilt the palette and added full keyboard + SR narration for live regions.",
+            "Amazon Aurora DSQL across us-east-1 and us-east-2 with a us-west-2 witness — both regions take writes, with optimistic-concurrency retries handling conflicts.",
+        },
+        {
+          label: "THE STAMPEDE",
+          title: "Proved it under fire",
+          detail:
+            "A live demo throws a 50,000-request stampede at both architectures: a conventional store oversells to 127/100. NoScalp allocates exactly 100 of 100 — every time, by construction.",
         },
       ],
       resolution:
-        "Shipped incrementally table-by-table. Spreadsheet exports — the workaround metric — dropped by two-thirds within a month.",
+        "Deployed and public. The oversell class of bugs isn't handled — it's unrepresentable. The demo makes the argument in one screen: 127/100 versus 100/100.",
       evidence: [
-        { id: "before", kind: "ui", caption: "Delta-first dashboard layout" },
-        { id: "stream", kind: "graph", caption: "Streaming update batching" },
-        { id: "a11y", kind: "blueprint", caption: "Accessible palette system" },
+        { id: "drop", kind: "ui", caption: "The drop lobby" },
+        { id: "stampede", kind: "graph", caption: "50k-request stampede test" },
+        { id: "schema", kind: "blueprint", caption: "Invariant-first schema" },
       ],
       impact: [
-        { value: "-66%", label: "SPREADSHEET EXPORTS" },
-        { value: "AA", label: "WCAG (WAS FAILING)" },
-        { value: "1s → 60ms", label: "UPDATE JANK" },
+        { value: "100/100", label: "EXACT ALLOCATION HELD" },
+        { value: "50K", label: "REQUEST STAMPEDE SURVIVED" },
+        { value: "127/100", label: "WHAT THE BASELINE SOLD" },
       ],
     },
   },
   {
-    id: "field-notes",
-    caseNo: "004",
-    title: "FIELD NOTES", // [PLACEHOLDER]
-    year: "2024",
-    category: "Experiment",
+    id: "photonest",
+    caseNo: "003",
+    title: "PHOTONEST",
+    year: "2026",
+    category: "Systems + Applied ML",
     summary:
-      "A self-initiated generative-art playground exploring type + physics.",
+      "Cloud photo services own your memories — a self-hosted library with CLIP natural-language search and face grouping keeps every byte on your own hardware.",
     description:
-      "An ongoing series of creative-coding experiments: kinetic typography, particle systems, and shader sketches. A sandbox for the techniques that later make it into client work.",
-    tags: ["Creative Coding", "GLSL", "Canvas"],
+      "A privacy-first Google Photos alternative you run yourself: FastAPI + workers index your library, CLIP embeddings in pgvector power natural-language search, InsightFace groups faces locally, and an Expo mobile app backs up your camera roll — with zero third-party clouds.",
+    tags: ["FastAPI", "CLIP + pgvector", "Docker"],
+    repo: "https://github.com/Db2203/selfhost",
     status: "ONGOING",
     caseStudy: {
       context:
-        "Field Notes is the lab: a standing commitment to ship one small interactive experiment a month, in public, with the source open.",
+        "Photo libraries are the most personal dataset most people have, and the standard deal is handing them to a cloud that scans, mines, and meters them. Self-hosting is the obvious answer — if it can match the two features that keep people locked in: search that understands language, and faces.",
       problem:
-        "Client work rarely leaves room to learn risky techniques on the clock. Without a sandbox, every 'can we do X?' becomes a guess instead of an answer.",
+        "Build the whole product, not a demo: index tens of thousands of local photos, search them with sentences ('beach at sunset'), group people locally, sync a phone's camera roll — and secure all of it well enough to expose to the open internet from a homelab.",
       investigation: [
         {
-          label: "RULE 01",
-          title: "One month, one toy",
+          label: "PIPELINE",
+          title: "Stateless core, honest workers",
           detail:
-            "Each experiment must be interactive, run at 60fps on a laptop, and fit in a single file small enough to read in one sitting.",
+            "Stateless FastAPI with arq background workers over Redis; Postgres with pgvector stores CLIP embeddings for semantic search; InsightFace runs face recognition entirely locally. Storage is an abstraction — local filesystem, S3, or MinIO.",
         },
         {
-          label: "RULE 02",
-          title: "Steal from physics",
+          label: "HARDENING",
+          title: "Auth like it's production",
           detail:
-            "Springs, fields, and noise beat keyframes. Most experiments start as a force system and end as typography.",
+            "Argon2 password hashing, short-lived JWTs with rotating single-use refresh tokens, per-device revocation, and HMAC-signed image URLs — plus Caddy TLS and Tailscale for remote access without exposure.",
         },
         {
-          label: "RULE 03",
-          title: "Graduate the winners",
+          label: "PROOF",
+          title: "Tested against real services",
           detail:
-            "Techniques that survive the lab get promoted into client work — the kinetic type and particle systems on this very site started here.",
+            "CI runs 47 tests against a real Postgres and a real MinIO — not mocks — so the storage abstraction and auth flows are exercised the way production would hit them. An Expo app handles iOS/Android camera-roll backup.",
         },
       ],
       resolution:
-        "The lab is why the answer to 'can we do X?' is usually a working demo by Thursday. Several experiments live on in production projects — including this portfolio.",
+        "A photo library that answers to exactly one person. Ongoing build — the case stays open, and the roadmap (sharing, dedup, more of the index) keeps it that way.",
       evidence: [
-        { id: "kinetic", kind: "blueprint", caption: "Kinetic type force system" },
-        { id: "particles", kind: "graph", caption: "Particle field tuning" },
-        { id: "city", kind: "skyline", caption: "Procedural city sketches" },
+        { id: "library", kind: "ui", caption: "Library + semantic search" },
+        { id: "arch", kind: "blueprint", caption: "Workers, storage, auth architecture" },
+        { id: "auth", kind: "graph", caption: "Token rotation flow" },
       ],
       impact: [
-        { value: "12+", label: "EXPERIMENTS SHIPPED" },
-        { value: "4", label: "PROMOTED TO CLIENT WORK" },
-        { value: "60fps", label: "HOUSE RULE" },
+        { value: "0", label: "THIRD-PARTY CLOUDS" },
+        { value: "47", label: "CI TESTS VS REAL SERVICES" },
+        { value: "3", label: "STORAGE BACKENDS" },
+      ],
+    },
+  },
+  {
+    id: "redditrecbuds",
+    caseNo: "004",
+    title: "REDDITRECBUDS",
+    year: "2026",
+    category: "LLM Data Pipeline",
+    summary:
+      "Earbud advice on Reddit is scattered across thousands of comments — an LLM extraction pipeline with Wilson-bound ranking turns r/Earbuds into a trustworthy recommender.",
+    description:
+      "A wireless-earbud recommender mined from r/Earbuds. LLMs (Llama 3.1 via Groq, Gemini 2.5 Flash) extract product mentions and sentiment from raw comments; user-level dedup and a volume-plus-confidence blend rank what the community actually trusts. Live on Streamlit.",
+    tags: ["Python", "Groq / Gemini", "DuckDB"],
+    repo: "https://github.com/Db2203/redditrecbuds",
+    // link: "" — [VERIFY] add the live Streamlit URL
+    status: "LIVE — DEPLOYED",
+    caseStudy: {
+      context:
+        "The best earbud reviews aren't on review sites — they're buried in thousands of r/Earbuds comments, unstructured and unranked. And in late 2025, Reddit closing its API made even reading them at scale a problem to solve.",
+      problem:
+        "Mine honest product opinions out of freeform Reddit text: get the data despite the API shutdown, extract which products people mean and how they feel, stop one enthusiastic user from voting fifty times, and rank so a product with 8 glowing mentions doesn't outrank one with 300 solid ones.",
+      investigation: [
+        {
+          label: "INGEST",
+          title: "Routed around the shutdown",
+          detail:
+            "When the Reddit API closed in late 2025, the pipeline moved to Arctic Shift for data access — with checkpointed, resumable ingestion into DuckDB so a failed run never starts from zero.",
+        },
+        {
+          label: "EXTRACT",
+          title: "LLMs as structured readers",
+          detail:
+            "Llama 3.1 (via Groq) and Gemini 2.5 Flash pull product mentions and sentiment out of raw comment text, deduplicated at the user level so one superfan counts once.",
+        },
+        {
+          label: "RANK",
+          title: "Statistics over vibes",
+          detail:
+            "Scores blend 0.75 · log-volume with 0.25 · Wilson lower bound — popularity tempered by statistical confidence, so small hype clusters can't beat sustained consensus. Streamlit + Plotly serve the results.",
+        },
+      ],
+      resolution:
+        "Deployed and public: community wisdom, made rankable — with the receipts (mention volume, sentiment, confidence) shown instead of a black-box score.",
+      evidence: [
+        { id: "ranking", kind: "graph", caption: "Volume × confidence ranking" },
+        { id: "app", kind: "ui", caption: "The live recommender" },
+        { id: "pipeline", kind: "blueprint", caption: "Ingest → extract → rank pipeline" },
+      ],
+      impact: [
+        { value: "2", label: "LLMS IN THE PIPELINE" },
+        { value: "75/25", label: "VOLUME / CONFIDENCE BLEND" },
+        { value: "LIVE", label: "ON STREAMLIT CLOUD" },
       ],
     },
   },
@@ -316,35 +317,37 @@ export type Testimonial = {
 
 export const testimonials: Testimonial[] = [
   {
-    // [PLACEHOLDER] — swap for a real quote
+    // [PLACEHOLDER] — swap for a real quote (hackathon teammate?)
     id: "w1",
     witnessNo: "01",
-    date: "2026-03-14",
-    relation: "CLIENT — AURORA",
+    date: "2026-06-30",
+    relation: "TEAMMATE — NOSCALP",
     quote:
-      "We asked for a redesign and got back a faster company. The booking flow paid for the engagement in the first quarter.",
+      "Most people demo a happy path. They demoed a 50,000-request stampede and dared the database to oversell. It didn't.",
     name: "J. Doe", // [PLACEHOLDER]
-    role: "Head of Product, Aurora",
+    role: "Hackathon Teammate",
   },
   {
+    // [PLACEHOLDER] — swap for a real quote
     id: "w2",
     witnessNo: "02",
-    date: "2025-11-02",
-    relation: "CLIENT — MONOLITH",
+    date: "2026-06-11",
+    relation: "REVIEWER — SAFEROUTE",
     quote:
-      "Every agency promised us 'award-worthy.' This is the only one whose site actually got us featured. Twice.",
+      "Half a million collision records in, one honest question out: what does the fast route actually cost you? That's the whole job, done right.",
     name: "R. Smith", // [PLACEHOLDER]
-    role: "Founder, Monolith Studio",
+    role: "Code Reviewer",
   },
   {
+    // [PLACEHOLDER] — swap for a real quote
     id: "w3",
     witnessNo: "03",
-    date: "2025-06-21",
-    relation: "COLLEAGUE — PULSE",
+    date: "2026-05-19",
+    relation: "COLLEAGUE",
     quote:
-      "Rare combination: argues about kerning in the morning and profiles frame times in the afternoon. Ship-ready in both.",
+      "Rare combination: profiles an ML pipeline in the morning and argues about a spring curve in the afternoon. Ship-ready in both.",
     name: "A. Kumar", // [PLACEHOLDER]
-    role: "Engineering Lead, Pulse",
+    role: "Colleague",
   },
 ];
 
