@@ -317,38 +317,6 @@ export const projects: Project[] = [
   },
 ];
 
-/* ── Playground ───────────────────────────────────────────────── */
-
-export type DemoKind = "kinetic" | "fluid" | "city" | "static";
-
-export const playground = {
-  heading: "R&D — THE WORKSHOP",
-  intro:
-    "Off-hours prototypes and half-built gadgets — and these ones actually run. Touch them.",
-  items: [
-    {
-      title: "Kinetic Type Engine",
-      note: "Glyphs bend toward the pointer",
-      demo: "kinetic" as DemoKind,
-    },
-    {
-      title: "Fluid Cursor",
-      note: "Particle field with pointer gravity",
-      demo: "fluid" as DemoKind,
-    },
-    {
-      title: "Night-City Generator",
-      note: "Seeded skyline — click to rebuild",
-      demo: "city" as DemoKind,
-    },
-    {
-      title: "Signal Static",
-      note: "Pointer velocity → noise field",
-      demo: "static" as DemoKind,
-    },
-  ],
-};
-
 export const contact = {
   heading: "SEND THE SIGNAL",
   blurb:
@@ -363,8 +331,8 @@ export const annotations = {
   work: "Card tilt: pointer offset → rotateX/Y springs. Rect cached on enter, never read per-move. Titles decrypt via a single rAF writing textContent.",
   about:
     "Server-rendered semantic HTML. Everything you see is crawlable — the atmosphere is a client-side enhancement layer.",
-  playground:
-    "Each demo runs ONE rAF, gated by IntersectionObserver + visibilitychange — scrolled away or tab hidden, everything pauses.",
+  interrogate:
+    "A Groq-backed streaming chat, zero client dependencies. The model is grounded on this site's own content data and refuses everything off the record.",
   log: "Real data: GitHub's public contribution calendar and events API, fetched at build time and revalidated daily. No tokens, no tracking — just the public record.",
   contact:
     "Magnetic button: spring toward pointer, snap home on leave. The beam is one shared conic-gradient utility.",

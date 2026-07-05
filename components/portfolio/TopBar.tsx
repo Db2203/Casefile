@@ -19,7 +19,7 @@ export default function TopBar() {
         {/* py-2 = comfortable tap targets on touch */}
         <a href="#work" className="link-wipe py-2">CASES</a>
         <a href="#about" className="link-wipe py-2">DOSSIER</a>
-        <a href="#playground" className="link-wipe py-2">WORKSHOP</a>
+        <a href="#interrogate" className="link-wipe py-2">INTERROGATE</a>
         <a href="#log" className="link-wipe py-2">STAKEOUT</a>
         <a href="#contact" className="link-wipe py-2">SIGNAL</a>
       </nav>

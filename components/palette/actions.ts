@@ -31,7 +31,7 @@ const SECTIONS: { id: string; label: string }[] = [
   { id: "top", label: "TOP — THE ROOFTOP" },
   { id: "work", label: "CASES — SELECTED WORK" },
   { id: "about", label: "DOSSIER — ABOUT" },
-  { id: "playground", label: "WORKSHOP — R&D" },
+  { id: "interrogate", label: "INTERROGATE — QUESTION THE RECORD" },
   { id: "log", label: "STAKEOUT — SURVEILLANCE LOG" },
   { id: "contact", label: "SIGNAL — CONTACT" },
 ];

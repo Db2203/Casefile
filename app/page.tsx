@@ -3,7 +3,7 @@ import TopBar from "@/components/portfolio/TopBar";
 import Hero from "@/components/portfolio/Hero";
 import Work from "@/components/portfolio/Work";
 import About from "@/components/portfolio/About";
-import Playground from "@/components/portfolio/Playground";
+import InterrogationSection from "@/components/interrogation/InterrogationSection";
 import SurveillanceLog from "@/components/portfolio/SurveillanceLog";
 import Contact from "@/components/portfolio/Contact";
 import Footer from "@/components/portfolio/Footer";
@@ -21,7 +21,7 @@ export default function Home() {
         <Hero />
         <Work />
         <About />
-        <Playground />
+        <InterrogationSection />
         <SurveillanceLog />
         <Contact />
         <Footer />
