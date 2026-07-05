@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef, type PointerEvent } from "react";
+import { useRef, type MouseEvent, type PointerEvent } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import type { Project } from "@/lib/content";
 import { useMediaPreferences } from "@/lib/useMediaPreferences";
@@ -17,6 +18,7 @@ import EvidencePlaceholder from "@/components/case/EvidencePlaceholder";
  */
 export default function CaseCard({ project }: { project: Project }) {
   const { canEnhance } = useMediaPreferences();
+  const router = useRouter();
   const rect = useRef<DOMRect | null>(null);
 
   const rx = useMotionValue(0);
@@ -42,11 +44,18 @@ export default function CaseCard({ project }: { project: Project }) {
     ry.set(0);
   };
 
+  // The cursor promises "OPEN CASE" over the whole card — keep that promise.
+  // Clicks on inner links (polaroids, VIEW CODE, LIVE) still win.
+  const onCardClick = (e: MouseEvent<HTMLElement>) => {
+    if ((e.target as HTMLElement).closest("a")) return;
+    router.push(`/case/${project.id}`);
+  };
+
   return (
     <CursorZone variant="case" label="OPEN CASE">
       <div style={{ perspective: 1100 }}>
         <motion.article
-          className="case-card group relative overflow-hidden border border-slate/70 bg-coal/60 p-6 backdrop-blur-[2px] transition-colors duration-300 hover:border-signal/50 sm:p-8"
+          className="case-card group relative cursor-pointer overflow-hidden border border-slate/70 bg-coal/60 p-6 backdrop-blur-[2px] transition-colors duration-300 hover:border-signal/50 sm:p-8"
           style={{
             rotateX,
             rotateY,
@@ -55,6 +64,7 @@ export default function CaseCard({ project }: { project: Project }) {
           onPointerEnter={onEnter}
           onPointerMove={onMove}
           onPointerLeave={onLeave}
+          onClick={onCardClick}
         >
           {/* flickering watermark */}
           <BatMark className="emblem-flicker pointer-events-none absolute -right-4 -top-2 w-28 text-ink opacity-85" />
