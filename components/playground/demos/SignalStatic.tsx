@@ -15,6 +15,7 @@ export default function SignalStatic() {
   const energy = useRef(0.15);
   const last = useRef<{ x: number; y: number } | null>(null);
   const skip = useRef(false);
+  const clock = useRef(0);
 
   const onMove = (e: PointerEvent<HTMLCanvasElement>) => {
     const prev = last.current;
@@ -24,7 +25,8 @@ export default function SignalStatic() {
     energy.current = Math.min(1, energy.current + v * 0.006);
   };
 
-  useRafLoop(canvasRef, () => {
+  useRafLoop(canvasRef, (dt) => {
+    clock.current += dt;
     skip.current = !skip.current;
     if (skip.current) return; // ~30fps is plenty for noise
 
@@ -37,7 +39,9 @@ export default function SignalStatic() {
       ctx.imageSmoothingEnabled = false;
     }
 
-    energy.current = Math.max(0.12, energy.current * 0.96);
+    // breathes on its own (touch/idle); pointer velocity spikes above it
+    const breath = 0.12 + 0.09 * (1 + Math.sin(clock.current * 0.9)) * 0.5;
+    energy.current = Math.max(breath, energy.current * 0.96);
     const e = energy.current;
 
     const img = ctx.createImageData(BW, BH);

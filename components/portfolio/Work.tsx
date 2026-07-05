@@ -10,7 +10,7 @@ export default function Work() {
   return (
     <section
       id="work"
-      className="relative overflow-hidden border-t border-slate/40 py-28"
+      className="relative overflow-hidden border-t border-slate/40 py-16 sm:py-28"
     >
       {/* parallax skyline layers — the descent */}
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full">

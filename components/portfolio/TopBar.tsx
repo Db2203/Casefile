@@ -13,14 +13,15 @@ export default function TopBar() {
         {profile.status}
       </span>
       <nav
-        className="order-3 flex w-full justify-center gap-5 md:order-2 md:w-auto md:gap-7"
+        className="order-3 flex w-full flex-wrap justify-center gap-x-6 md:order-2 md:w-auto md:gap-7"
         aria-label="Sections"
       >
-        <a href="#work" className="link-wipe">CASES</a>
-        <a href="#about" className="link-wipe">DOSSIER</a>
-        <a href="#playground" className="link-wipe">WORKSHOP</a>
-        <a href="#witnesses" className="link-wipe">WITNESSES</a>
-        <a href="#contact" className="link-wipe">SIGNAL</a>
+        {/* py-2 = comfortable tap targets on touch */}
+        <a href="#work" className="link-wipe py-2">CASES</a>
+        <a href="#about" className="link-wipe py-2">DOSSIER</a>
+        <a href="#playground" className="link-wipe py-2">WORKSHOP</a>
+        <a href="#witnesses" className="link-wipe py-2">WITNESSES</a>
+        <a href="#contact" className="link-wipe py-2">SIGNAL</a>
       </nav>
     </header>
   );

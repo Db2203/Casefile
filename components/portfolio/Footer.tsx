@@ -11,9 +11,14 @@ export default function Footer() {
           BUILT AFTER DARK
         </span>
         <LiveClock />
-        <span className="text-ash/75">
+        {/* keyboard hint on hover devices; touch devices get dock guidance */}
+        <span className="text-ash/75 [@media(hover:none)]:hidden">
           PRESS <span className="text-signal">D</span> TO SCAN · THE REST IS
           CLASSIFIED
+        </span>
+        <span className="hidden text-ash/75 [@media(hover:none)]:inline">
+          TAP <span className="text-signal">TERMINAL</span> TO NAVIGATE · THE
+          REST IS CLASSIFIED
         </span>
       </div>
     </footer>

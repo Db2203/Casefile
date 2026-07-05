@@ -7,7 +7,10 @@ export default function About() {
   const marquee = [...about.skills, ...about.skills];
 
   return (
-    <section id="about" className="relative border-t border-slate/40 py-28">
+    <section
+      id="about"
+      className="relative border-t border-slate/40 py-16 sm:py-28"
+    >
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">

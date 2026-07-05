@@ -9,7 +9,13 @@ export default function HudDock() {
   const setPaletteOpen = useNoir((s) => s.setPaletteOpen);
 
   return (
-    <div className="fixed bottom-4 right-4 z-[80] flex flex-wrap justify-end gap-2">
+    <div
+      className="fixed z-[80] flex flex-wrap justify-end gap-2"
+      style={{
+        bottom: "max(1rem, env(safe-area-inset-bottom))",
+        right: "max(1rem, env(safe-area-inset-right))",
+      }}
+    >
       <AmbientSoundToggle />
       <button
         onClick={() => setPaletteOpen(true)}

@@ -8,7 +8,7 @@ export default function Playground() {
   return (
     <section
       id="playground"
-      className="relative border-t border-slate/40 py-28"
+      className="relative border-t border-slate/40 py-16 sm:py-28"
     >
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>

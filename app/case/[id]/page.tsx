@@ -83,7 +83,7 @@ export default async function CasePage({
           <Annotation id="case" className="absolute right-6 top-24 sm:right-10" />
 
           {/* dossier hero */}
-          <section className="py-16 sm:py-24">
+          <section className="py-12 sm:py-24">
             <Kicker>CASE #{project.caseNo} — {project.year}</Kicker>
             <h1 className="display text-[clamp(3rem,10vw,8rem)] text-bone">
               {project.title}
@@ -121,21 +121,21 @@ export default async function CasePage({
             </div>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>01 — CONTEXT</Kicker>
               <Body>{cs.context}</Body>
             </Reveal>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>02 — THE PROBLEM</Kicker>
               <Body>{cs.problem}</Body>
             </Reveal>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>03 — INVESTIGATION</Kicker>
             </Reveal>
@@ -144,14 +144,14 @@ export default async function CasePage({
             </div>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>04 — RESOLUTION</Kicker>
               <Body>{cs.resolution}</Body>
             </Reveal>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>05 — EVIDENCE</Kicker>
             </Reveal>
@@ -160,7 +160,7 @@ export default async function CasePage({
             </div>
           </section>
 
-          <section className="border-t border-slate/40 py-14">
+          <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
               <Kicker>06 — IMPACT</Kicker>
             </Reveal>

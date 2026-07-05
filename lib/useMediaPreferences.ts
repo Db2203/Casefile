@@ -21,14 +21,19 @@ function useMediaQuery(query: string, serverValue = false): boolean {
 export interface MediaPreferences {
   prefersReducedMotion: boolean;
   /**
-   * Gate for POINTER-dependent enhancement: custom cursor, flashlight,
-   * magnetic buttons, tilt, smooth scroll. False on SSR/first paint, so the
-   * page always renders fully-lit, native-cursor, crawlable HTML first.
+   * Gate for POINTER-dependent enhancement: custom cursor, pointer-driven
+   * flashlight, magnetic buttons, tilt, smooth scroll. False on SSR/first
+   * paint, so the page always renders fully-lit, crawlable HTML first.
    *
    * Pure atmosphere (rain, lightning, grain) gates on !prefersReducedMotion
    * only — phones get the weather too.
    */
   canEnhance: boolean;
+  /**
+   * Touch/coarse-pointer device that still wants motion — gets AUTONOMOUS
+   * variants (auto-roaming flashlight, self-animating demos).
+   */
+  isCoarseTouch: boolean;
 }
 
 export function useMediaPreferences(): MediaPreferences {
@@ -39,6 +44,7 @@ export function useMediaPreferences(): MediaPreferences {
   );
 
   const canEnhance = pointerFine && !isSmall && !prefersReducedMotion;
+  const isCoarseTouch = !pointerFine && !prefersReducedMotion;
 
-  return { prefersReducedMotion, canEnhance };
+  return { prefersReducedMotion, canEnhance, isCoarseTouch };
 }

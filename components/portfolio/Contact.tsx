@@ -10,7 +10,7 @@ export default function Contact() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden border-t border-slate/40 py-32"
+      className="relative overflow-hidden border-t border-slate/40 py-20 sm:py-32"
     >
       {/* the beam behind the CTA */}
       <div
@@ -44,7 +44,7 @@ export default function Contact() {
               <CursorZone variant="link">
                 <a
                   href={`mailto:${contact.email}`}
-                  className="inline-block border-2 border-signal bg-signal/5 px-10 py-5 font-mono text-sm tracking-[0.25em] text-signal shadow-[0_0_50px_-10px_rgba(245,178,26,0.45)] transition-colors duration-300 hover:bg-signal hover:text-void"
+                  className="inline-block break-all border-2 border-signal bg-signal/5 px-6 py-5 font-mono text-xs tracking-[0.25em] text-signal shadow-[0_0_50px_-10px_rgba(245,178,26,0.45)] transition-colors duration-300 hover:bg-signal hover:text-void sm:px-10 sm:text-sm"
                 >
                   {contact.email.toUpperCase()}
                 </a>

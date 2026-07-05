@@ -32,9 +32,10 @@ export default function DemoCard({
   demo: DemoKind;
   index: number;
 }) {
-  const { canEnhance } = useMediaPreferences();
-  // NightCity has no pointer dependence — allow it on touch as well.
-  const live = canEnhance || demo === "city";
+  const { prefersReducedMotion } = useMediaPreferences();
+  // Every demo has an autonomous mode now (wave/wander/breathe/tap) — live
+  // everywhere except reduced motion, which gets the designed static art.
+  const live = !prefersReducedMotion;
 
   return (
     <CursorZone variant="link" className="h-full">

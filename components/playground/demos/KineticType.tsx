@@ -18,6 +18,7 @@ export default function KineticType() {
   const pointer = useRef<{ x: number; y: number } | null>(null);
   const rect = useRef<DOMRect | null>(null);
   const weights = useRef<number[]>(Array(WORD.length).fill(BASE_W));
+  const clock = useRef(0);
 
   const onEnter = (e: PointerEvent<HTMLDivElement>) => {
     rect.current = e.currentTarget.getBoundingClientRect();
@@ -32,9 +33,10 @@ export default function KineticType() {
     rect.current = null;
   };
 
-  useRafLoop(wrap, () => {
+  useRafLoop(wrap, (dt) => {
     const r = rect.current;
     const p = pointer.current;
+    clock.current += dt;
     for (let i = 0; i < WORD.length; i++) {
       const el = spans.current[i];
       if (!el) continue;
@@ -46,6 +48,10 @@ export default function KineticType() {
         const d = Math.hypot(p.x - cx, p.y - cy);
         const t = Math.max(0, 1 - d / RADIUS);
         target = BASE_W + (MAX_W - BASE_W) * t;
+      } else {
+        // autonomous: a weight wave travels through the glyphs (touch/idle)
+        const wave = Math.max(0, Math.sin(clock.current * 1.8 - i * 0.85));
+        target = BASE_W + (MAX_W - BASE_W) * wave * 0.7;
       }
       const w = (weights.current[i] += (target - weights.current[i]) * 0.18);
       const lift = ((w - BASE_W) / (MAX_W - BASE_W)) * -9;

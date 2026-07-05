@@ -5,7 +5,7 @@ import { SkylineFar, SkylineNear } from "@/components/atmosphere/Skyline";
 /** Lost in the city — themed 404, pure CSS atmosphere (server-renderable). */
 export default function NotFound() {
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-void px-6 text-center">
+    <main className="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden bg-void px-6 text-center">
       <BatMark className="pointer-events-none absolute left-1/2 top-[12%] w-64 -translate-x-1/2 text-coal" />
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0">

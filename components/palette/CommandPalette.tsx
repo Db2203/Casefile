@@ -192,7 +192,7 @@ export default function CommandPalette() {
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[88] flex items-start justify-center px-4 pt-[14vh]"
+          className="fixed inset-0 z-[88] flex items-start justify-center px-4 pt-[8vh] sm:pt-[14vh]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -225,7 +225,17 @@ export default function CommandPalette() {
                 WAYNE TERMINAL v3.7 —{" "}
                 <span className="text-signal">AUTHORIZED</span>
               </span>
-              <span className="animate-pulse text-signal">█</span>
+              <span className="flex items-center gap-3">
+                <span aria-hidden className="animate-pulse text-signal">█</span>
+                {/* visible tap target for touch users */}
+                <button
+                  onClick={() => setOpen(false)}
+                  aria-label="Close terminal"
+                  className="-my-1 px-2 py-1 text-xs text-ash transition-colors hover:text-signal"
+                >
+                  ✕
+                </button>
+              </span>
             </div>
 
             {/* input */}
@@ -251,7 +261,7 @@ export default function CommandPalette() {
                 }}
                 onKeyDown={onInputKey}
                 placeholder="TYPE A COMMAND…"
-                className="w-full bg-transparent font-mono text-sm tracking-[0.15em] text-bone placeholder:text-ash/50 focus:outline-none"
+                className="w-full bg-transparent font-mono text-base tracking-[0.15em] text-bone placeholder:text-ash/50 focus:outline-none sm:text-sm"
                 autoComplete="off"
                 spellCheck={false}
               />
@@ -313,7 +323,12 @@ export default function CommandPalette() {
               <span aria-live="polite" className="text-signal">
                 {status}
               </span>
-              <span>↑↓ NAVIGATE · ↵ EXECUTE · ESC ABORT</span>
+              <span className="[@media(hover:none)]:hidden">
+                ↑↓ NAVIGATE · ↵ EXECUTE · ESC ABORT
+              </span>
+              <span className="hidden [@media(hover:none)]:inline">
+                TAP TO EXECUTE · ✕ ABORT
+              </span>
             </div>
           </motion.div>
         </motion.div>

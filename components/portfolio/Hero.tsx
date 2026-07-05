@@ -57,13 +57,13 @@ function markSwept() {
 }
 
 export default function Hero() {
-  const { canEnhance } = useMediaPreferences();
+  const { canEnhance, isCoarseTouch } = useMediaPreferences();
   const reduced = useReducedMotion();
   const bootDone = useNoir((s) => s.bootDone);
   const lightsOn = useNoir((s) => s.lightsOn);
   const toggleLights = useNoir((s) => s.toggleLights);
 
-  // Light target (set by sweep choreography, then by the pointer).
+  // Light target (set by sweep choreography, the pointer, or the auto-roam).
   const tx = useMotionValue(-600);
   const ty = useMotionValue(-600);
   const lx = useSpring(tx, { stiffness: 140, damping: 22, mass: 0.8 });
@@ -71,13 +71,60 @@ export default function Hero() {
   const tScale = useMotionValue(REST_SCALE);
   const s = useSpring(tScale, { stiffness: 160, damping: 26 });
 
-  const flashlightActive = canEnhance && !lightsOn;
+  // pointer → desktop (sweep, then cursor control)
+  // auto    → touch devices: the beam roams on its own; hold to widen
+  // off     → reduced motion / LIGHTS ON
+  const flashlightMode: "pointer" | "auto" | "off" = lightsOn
+    ? "off"
+    : canEnhance
+      ? "pointer"
+      : isCoarseTouch
+        ? "auto"
+        : "off";
+  const flashlightActive = flashlightMode !== "off";
   // Captured at render: first-ever shroud mount gets the slow cinematic fade,
   // re-mounts (LIGHTS toggling) get a quick one.
   const quickFade = shroudShownOnce;
 
+  // AUTO mode: slow lissajous drift across the headline area.
   useEffect(() => {
-    if (!flashlightActive) return;
+    if (flashlightMode !== "auto" || !bootDone) return;
+    shroudShownOnce = true;
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    tx.set(w * 0.25);
+    ty.set(h * 0.35);
+    tScale.set(SWEEP_SCALE);
+    const driftX = animate(tx, [w * 0.12, w * 0.85], {
+      duration: 11,
+      repeat: Infinity,
+      repeatType: "mirror",
+      ease: "easeInOut",
+    });
+    const driftY = animate(ty, [h * 0.22, h * 0.72], {
+      duration: 7.3,
+      repeat: Infinity,
+      repeatType: "mirror",
+      ease: "easeInOut",
+    });
+    // tap-and-hold widens the beam
+    const down = () => tScale.set(WIDE_SCALE);
+    const up = () => tScale.set(SWEEP_SCALE);
+    window.addEventListener("pointerdown", down);
+    window.addEventListener("pointerup", up);
+    window.addEventListener("pointercancel", up);
+    return () => {
+      driftX.stop();
+      driftY.stop();
+      window.removeEventListener("pointerdown", down);
+      window.removeEventListener("pointerup", up);
+      window.removeEventListener("pointercancel", up);
+    };
+  }, [flashlightMode, bootDone, tx, ty, tScale]);
+
+  // POINTER mode: one-shot sweep, then the cursor takes the light.
+  useEffect(() => {
+    if (flashlightMode !== "pointer") return;
     shroudShownOnce = true;
 
     const unbindPointer = bindPointer();
@@ -152,7 +199,7 @@ export default function Hero() {
     });
 
     return () => subs.forEach((fn) => fn());
-  }, [flashlightActive, bootDone, tx, ty, tScale]);
+  }, [flashlightMode, bootDone, tx, ty, tScale]);
 
   const show = bootDone || reduced;
 
@@ -160,12 +207,12 @@ export default function Hero() {
     <section
       id="top"
       aria-label="Intro"
-      className="relative flex min-h-screen flex-col justify-center overflow-hidden"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden"
     >
       {/* ── lit scene (under the shroud) ─────────────────────────── */}
 
       {/* faint watermark mark behind the headline — upper-right, balanced against the headline block */}
-      <BatMark className="pointer-events-none absolute right-[5%] top-[20%] w-[42vw] max-w-xl text-coal" />
+      <BatMark className="pointer-events-none absolute right-[5%] top-[14%] w-[60vw] max-w-xl text-coal sm:top-[20%] sm:w-[42vw]" />
 
       {/* skyline at the bottom edge */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0">
@@ -263,14 +310,21 @@ export default function Hero() {
       )}
 
       {/* ── always-above-the-dark UI ─────────────────────────────── */}
-      <div className="absolute inset-x-0 bottom-6 z-40 flex items-end justify-between px-6 sm:px-10">
+      <div
+        className="absolute inset-x-0 z-40 flex items-end justify-between gap-4 px-6 sm:px-10"
+        style={{ bottom: "max(1.5rem, env(safe-area-inset-bottom))" }}
+      >
         <p className="font-mono text-[10px] tracking-[0.3em] text-ash">
-          {flashlightActive ? hero.hint.toUpperCase() : "SCROLL TO DESCEND ↓"}
+          {flashlightMode === "pointer"
+            ? hero.hint.toUpperCase()
+            : flashlightMode === "auto"
+              ? "THE LIGHT ROAMS · HOLD TO WIDEN"
+              : "SCROLL TO DESCEND ↓"}
         </p>
-        {canEnhance && (
+        {(canEnhance || isCoarseTouch) && (
           <button
             onClick={toggleLights}
-            className="rounded-sm border border-slate bg-void/60 px-3 py-2 font-mono text-[10px] tracking-[0.25em] text-ash backdrop-blur transition-colors hover:border-signal hover:text-signal"
+            className="shrink-0 rounded-sm border border-slate bg-void/60 px-3 py-2 font-mono text-[10px] tracking-[0.25em] text-ash backdrop-blur transition-colors hover:border-signal hover:text-signal"
           >
             {lightsOn ? "LIGHTS OFF" : "LIGHTS ON"}
           </button>

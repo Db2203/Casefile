@@ -106,7 +106,7 @@ export default function CaseCard({ project }: { project: Project }) {
           </div>
 
           {/* evidence polaroids — clipped to the dossier, straighten on hover */}
-          <div className="mt-7 flex gap-5">
+          <div className="mt-7 flex flex-wrap gap-5">
             {project.caseStudy.evidence.slice(0, 2).map((ev, i) => (
               <Link
                 key={ev.id}
