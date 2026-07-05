@@ -42,3 +42,7 @@ next-env.d.ts
 
 # local dev logs
 dev.log
+
+# local tooling config (not for the public repo)
+CLAUDE.md
+AGENTS.md
