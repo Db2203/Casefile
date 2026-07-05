@@ -21,7 +21,7 @@ export default function Contact() {
       <div className="relative mx-auto max-w-6xl px-6 text-center sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">
-            04 — {contact.heading}
+            05 — {contact.heading}
           </p>
           <h2 className="display mx-auto max-w-4xl text-[clamp(2.6rem,8vw,6.5rem)] text-bone">
             The City Needs

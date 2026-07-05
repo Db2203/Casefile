@@ -1,9 +1,9 @@
 import { playground } from "@/lib/content";
 import Reveal from "@/components/primitives/Reveal";
-import CursorZone from "@/components/cursor/CursorZone";
 import Annotation from "@/components/detective/Annotation";
+import DemoCard from "@/components/playground/DemoCard";
 
-/** R&D — the workshop. Prototypes on blueprint-grid cards. */
+/** R&D — the workshop. The gadgets on these cards actually run. */
 export default function Playground() {
   return (
     <section
@@ -32,27 +32,12 @@ export default function Playground() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {playground.items.map((item, i) => (
             <Reveal key={item.title} delay={i * 0.07}>
-              <CursorZone variant="link">
-                <div
-                  className="group relative h-full overflow-hidden border border-slate/70 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-signal/60 hover:shadow-[0_8px_40px_-12px_rgba(245,178,26,0.25)]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(42,45,54,0.22) 1px, transparent 1px), linear-gradient(90deg, rgba(42,45,54,0.22) 1px, transparent 1px)",
-                    backgroundSize: "22px 22px",
-                    backgroundColor: "rgba(20,20,26,0.6)",
-                  }}
-                >
-                  <p className="mb-1 font-mono text-[10px] tracking-[0.3em] text-signal/70">
-                    PROTO-{String(i + 1).padStart(2, "0")}
-                  </p>
-                  <p className="font-semibold text-bone transition-colors group-hover:text-signal-hot">
-                    {item.title}
-                  </p>
-                  <p className="mt-2 font-mono text-[11px] leading-relaxed tracking-wide text-ash">
-                    {item.note}
-                  </p>
-                </div>
-              </CursorZone>
+              <DemoCard
+                title={item.title}
+                note={item.note}
+                demo={item.demo}
+                index={i}
+              />
             </Reveal>
           ))}
         </div>
