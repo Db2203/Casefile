@@ -13,7 +13,20 @@ import BatMark from "./BatMark";
  */
 export default function BootSequence() {
   const setBootDone = useNoir((s) => s.setBootDone);
+  const bootNonce = useNoir((s) => s.bootNonce);
   const [show, setShow] = useState(false);
+
+  // palette "REPLAY BOOT SEQUENCE": clear session gates and rerun
+  useEffect(() => {
+    if (bootNonce === 0) return;
+    try {
+      sessionStorage.removeItem("noir-boot");
+      sessionStorage.removeItem("noir-sweep");
+    } catch {
+      /* ignore */
+    }
+    setBootDone(false);
+  }, [bootNonce, setBootDone]);
 
   useEffect(() => {
     let seen = false;

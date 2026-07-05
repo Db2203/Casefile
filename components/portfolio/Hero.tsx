@@ -42,17 +42,17 @@ let shroudShownOnce = false;
 
 function readSwept(): boolean {
   try {
-    return sessionStorage.getItem("noir-sweep") === "1" || sweptFallback;
+    // storage is the source of truth (lets "replay boot" reset the sweep)
+    return sessionStorage.getItem("noir-sweep") === "1";
   } catch {
     return sweptFallback;
   }
 }
 function markSwept() {
-  sweptFallback = true;
   try {
     sessionStorage.setItem("noir-sweep", "1");
   } catch {
-    /* ignore */
+    sweptFallback = true;
   }
 }
 

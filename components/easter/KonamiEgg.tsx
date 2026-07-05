@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useNoir } from "@/lib/store";
 import BatMark from "@/components/atmosphere/BatMark";
 
 const KONAMI = [
@@ -10,21 +11,42 @@ const KONAMI = [
 ];
 const WORD = "batman";
 
-/** Type "batman" (or the Konami code) → the signal fires across the sky. */
+/**
+ * The signal fires when: you type "batman", enter the Konami code, or any
+ * surface calls store.fireSignal() (single firing path via signalNonce).
+ */
 export default function KonamiEgg() {
   const [fired, setFired] = useState(false);
+  const nonce = useNoir((s) => s.signalNonce);
+  const fireSignal = useNoir((s) => s.fireSignal);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // one-shot event: react to nonce increments
+  useEffect(() => {
+    if (nonce === 0) return;
+    setFired(true);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => setFired(false), 4200);
+  }, [nonce]);
+
+  useEffect(
+    () => () => {
+      if (timer.current) clearTimeout(timer.current);
+    },
+    [],
+  );
 
   useEffect(() => {
     let wordBuf = "";
     let codeIdx = 0;
-    let timer: ReturnType<typeof setTimeout> | undefined;
 
     const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable))
+        return;
       const k = e.key.toLowerCase();
 
-      // konami sequence
       codeIdx = k === KONAMI[codeIdx] ? codeIdx + 1 : k === KONAMI[0] ? 1 : 0;
-      // typed keyword
       if (k.length === 1) {
         wordBuf = (wordBuf + k).slice(-WORD.length);
       }
@@ -32,17 +54,12 @@ export default function KonamiEgg() {
       if (codeIdx === KONAMI.length || wordBuf === WORD) {
         codeIdx = 0;
         wordBuf = "";
-        setFired(true);
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => setFired(false), 4200);
+        fireSignal();
       }
     };
     window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      if (timer) clearTimeout(timer);
-    };
-  }, []);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [fireSignal]);
 
   return (
     <AnimatePresence>
