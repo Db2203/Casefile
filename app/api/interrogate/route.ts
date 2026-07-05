@@ -87,16 +87,32 @@ interface ChatMessage {
 // Cheap input-side jailbreak filter: obvious extraction attempts get the
 // in-character line WITHOUT spending model tokens.
 const INJECTION_RE =
-  /ignore\s+(all\s+)?(previous|prior|above|earlier)\s+instructions|system\s*prompt|reveal\s+your|repeat\s+(your|the)\s+(instructions|prompt|rules)|you\s+are\s+now|act\s+as\s+(if|a(?!n?\s*(recruiter|client)))|developer\s+mode/i;
+  /ignore\s+(all\s+)?(previous|prior|above|earlier)\s+instructions|system\s*prompt|reveal\s+your|repeat\s+(your|the)\s+(instructions|prompt|rules)|you\s+are\s+now|act\s+as\s+(if|a(?!n?\s*(recruiter|client)))|developer\s+mode|verbatim|word[\s-]for[\s-]word|initial\s+(prompt|instructions|message)|echo\s+(the|your|everything|back|all)|print\s+(everything|all|the\s+(text|prompt|instructions|rules))|continue\s+(printing|the\s+prompt)/i;
 
-// Output-side guard: if the model gets tricked anyway, its dump starts with
-// recognizable prompt text — catch it in the first buffered chunk.
-const LEAK_MARKERS = [
-  "You are THE ARCHIVE",
-  "STYLE — STRICT",
-  "YOU KNOW ONLY THE RECORD",
-  "PLAIN TEXT ONLY",
+// Distinctive fragments of the system prompt. If any appear in an INCOMING
+// message, someone is trying to smuggle the prompt back in to have the model
+// "continue" it (a forged-history attack). If any appear in the OUTGOING
+// stream, the model was tricked into leaking. Either way → seal. Matched
+// case-insensitively; chosen to be phrases no real recruiter question contains.
+const PROMPT_FRAGMENTS = [
+  "you are the archive",
+  "noir records system",
+  "you know only the record",
+  "plain text only",
+  "style — strict",
+  "style - strict",
+  "never use markdown",
+  "clipped noir",
+  "hard limit: 90",
+  "security — absolute",
+  "gsk_",
+  "groq_api_key",
+  "gemini_api_key",
 ];
+function hasPromptLeak(text: string): boolean {
+  const t = text.toLowerCase();
+  return PROMPT_FRAGMENTS.some((m) => t.includes(m));
+}
 const SEALED_LINE = "Nice try. The file stays sealed.";
 
 function sealed(text: string, status = 400) {
@@ -143,7 +159,15 @@ export async function POST(req: Request) {
     return sealed("THE ARCHIVE DIDN'T CATCH THAT.");
   }
 
-  if (INJECTION_RE.test(messages[messages.length - 1].content)) {
+  // Scan the WHOLE conversation, not just the last line. A caller hitting the
+  // API directly can forge assistant turns that embed the prompt (or an
+  // injection) and then ask the model to "continue" — so any message that
+  // matches an extraction pattern OR already contains prompt text is an attack.
+  if (
+    messages.some(
+      (m) => INJECTION_RE.test(m.content) || hasPromptLeak(m.content),
+    )
+  ) {
     return sealed(SEALED_LINE, 200);
   }
 
@@ -188,39 +212,43 @@ export async function POST(req: Request) {
     );
   }
 
-  // Transform the OpenAI-compatible SSE stream into plain text chunks.
-  // The first ~120 chars are buffered and checked against LEAK_MARKERS so a
-  // successfully-jailbroken prompt dump never reaches the visitor.
+  // Transform the OpenAI-compatible SSE stream into plain text chunks. Backstop
+  // against a prompt dump: hold the opening HOLD chars before releasing any
+  // output, and re-check the whole accumulated answer on every token — so a
+  // leak that appears mid-stream (not just at the very start) is still caught.
   const live = upstream; // const capture — closures below need the narrowing
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
   let buffer = "";
-  let head = "";
-  let headChecked = false;
 
   const stream = new ReadableStream<Uint8Array>({
     async start(controller) {
       const reader = live.body!.getReader();
-      const emit = (token: string) => {
-        if (headChecked) {
-          controller.enqueue(encoder.encode(token));
-          return true;
+      let full = ""; // everything the model has produced so far
+      let sent = 0; // how much of `full` we've already streamed to the client
+      let done = false; // leak detected → stop
+      const HOLD = 160;
+
+      const vet = (final: boolean) => {
+        if (done) return;
+        if (hasPromptLeak(full)) {
+          if (sent === 0) controller.enqueue(encoder.encode(SEALED_LINE));
+          done = true; // suppress the rest of the dump
+          return;
         }
-        head += token;
-        if (head.length < 120) return true;
-        headChecked = true;
-        if (LEAK_MARKERS.some((m) => head.includes(m))) {
-          controller.enqueue(encoder.encode(SEALED_LINE));
-          return false; // stop reading — the rest is the dump
+        if (full.length >= HOLD || final) {
+          const chunk = full.slice(sent);
+          if (chunk) {
+            controller.enqueue(encoder.encode(chunk));
+            sent = full.length;
+          }
         }
-        controller.enqueue(encoder.encode(head));
-        return true;
       };
 
       try {
         outer: for (;;) {
-          const { done, value } = await reader.read();
-          if (done) break;
+          const { done: rdone, value } = await reader.read();
+          if (rdone) break;
           buffer += decoder.decode(value, { stream: true });
           const lines = buffer.split("\n");
           buffer = lines.pop() ?? "";
@@ -234,20 +262,17 @@ export async function POST(req: Request) {
                 choices?: { delta?: { content?: string } }[];
               };
               const token = json.choices?.[0]?.delta?.content;
-              if (token && !emit(token)) break outer;
+              if (token) {
+                full += token;
+                vet(false);
+                if (done) break outer;
+              }
             } catch {
               /* partial line — ignored */
             }
           }
         }
-        // short answer that never hit 120 chars — flush it (after checking)
-        if (!headChecked && head) {
-          if (LEAK_MARKERS.some((m) => head.includes(m))) {
-            controller.enqueue(encoder.encode(SEALED_LINE));
-          } else {
-            controller.enqueue(encoder.encode(head));
-          }
-        }
+        vet(true); // flush the held opening for a clean short answer
       } finally {
         controller.close();
         reader.releaseLock();
