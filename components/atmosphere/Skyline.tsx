@@ -1,7 +1,7 @@
-/**
- * Art-deco stepped skyline silhouettes — three deterministic layers for
+﻿/**
+ * Art-deco stepped skyline silhouettes - three deterministic layers for
  * parallax. Pure SVG, server-safe, no randomness (hydration-stable).
- * Each building is [x, width, height] on a 1200×200 viewBox (y grows up).
+ * Each building is [x, width, height] on a 1200x200 viewBox (y grows up).
  */
 
 type B = [x: number, w: number, h: number];
@@ -24,7 +24,8 @@ const NEAR: B[] = [
   [690, 110, 82], [820, 150, 48], [990, 110, 72], [1115, 85, 58],
 ];
 
-function Layer({ data, lit = false }: { data: B[]; lit?: boolean }) {
+/** Shared stepped-crown building renderer (also used by demos + evidence art). */
+export function SkylineLayer({ data, lit = false }: { data: B[]; lit?: boolean }) {
   return (
     <g>
       {data.map(([x, w, h], i) => (
@@ -62,7 +63,7 @@ function Layer({ data, lit = false }: { data: B[]; lit?: boolean }) {
 export function SkylineFar({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 1200 200" preserveAspectRatio="none" className={className} aria-hidden>
-      <Layer data={FAR} />
+      <SkylineLayer data={FAR} />
     </svg>
   );
 }
@@ -70,7 +71,7 @@ export function SkylineFar({ className }: { className?: string }) {
 export function SkylineMid({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 1200 200" preserveAspectRatio="none" className={className} aria-hidden>
-      <Layer data={MID} />
+      <SkylineLayer data={MID} />
     </svg>
   );
 }
@@ -78,7 +79,7 @@ export function SkylineMid({ className }: { className?: string }) {
 export function SkylineNear({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 1200 200" preserveAspectRatio="none" className={className} aria-hidden>
-      <Layer data={NEAR} lit />
+      <SkylineLayer data={NEAR} lit />
     </svg>
   );
 }

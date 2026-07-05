@@ -1,12 +1,14 @@
 "use client";
 
 import { useRef, type PointerEvent } from "react";
+import Link from "next/link";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import type { Project } from "@/lib/content";
 import { useMediaPreferences } from "@/lib/useMediaPreferences";
 import CursorZone from "@/components/cursor/CursorZone";
 import TextScramble from "@/components/primitives/TextScramble";
 import BatMark from "@/components/atmosphere/BatMark";
+import EvidencePlaceholder from "@/components/case/EvidencePlaceholder";
 
 /**
  * A project as a noir case file: pointer-tilt dossier, redaction bar that
@@ -93,15 +95,55 @@ export default function CaseCard({ project }: { project: Project }) {
             </span>
           </div>
 
-          {project.link && (
-            <a
-              href={project.link}
-              className="link-wipe mt-6 inline-block font-mono text-xs tracking-[0.2em] text-bone"
+          {/* evidence polaroids — clipped to the dossier, straighten on hover */}
+          <div className="mt-7 flex gap-5">
+            {project.caseStudy.evidence.slice(0, 2).map((ev, i) => (
+              <Link
+                key={ev.id}
+                href={`/case/${project.id}#evidence`}
+                aria-label={`Evidence: ${ev.caption}`}
+                className={`relative w-32 border border-slate/70 bg-coal p-1 pb-3 transition-transform duration-300 hover:rotate-0 hover:border-signal/50 ${
+                  i === 0 ? "-rotate-3" : "rotate-2"
+                }`}
+              >
+                {/* tape */}
+                <span
+                  aria-hidden
+                  className={`absolute -top-2 left-1/2 h-4 w-10 -translate-x-1/2 bg-signal/20 backdrop-blur-[1px] ${
+                    i === 0 ? "rotate-6" : "-rotate-3"
+                  }`}
+                />
+                <EvidencePlaceholder
+                  seed={`${project.id}-${ev.id}`}
+                  kind={ev.kind}
+                  className="h-auto w-full"
+                />
+                <span className="mt-1 block truncate px-0.5 font-mono text-[8px] tracking-[0.2em] text-ash">
+                  {ev.caption.toUpperCase()}
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          <div className="mt-6 flex items-center gap-6">
+            <Link
+              href={`/case/${project.id}`}
+              className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-bone"
             >
               OPEN CASE FILE ↗
               <span className="sr-only"> — {project.title}</span>
-            </a>
-          )}
+            </Link>
+            {project.link && (
+              <a
+                href={project.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-signal"
+              >
+                LIVE SITE ↗
+              </a>
+            )}
+          </div>
         </motion.article>
       </div>
     </CursorZone>
