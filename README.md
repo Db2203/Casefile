@@ -42,6 +42,12 @@ npm install
 npm run dev
 ```
 
+## Configuration
+
+Owner identity (name, email, links) is injected via environment variables —
+see `.env.local.example`. Unset variables fall back to the placeholder
+persona, so the project runs out of the box.
+
 ## Easter eggs
 
 Classified. (Try typing something a certain vigilante would answer to.)

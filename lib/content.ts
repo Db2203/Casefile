@@ -12,17 +12,31 @@
 
 export const siteUrl = "https://casefile-bay.vercel.app";
 
+/**
+ * Personal info comes from ENVIRONMENT VARIABLES so this public repo never
+ * contains it — the values below are the neutral fallback persona.
+ * Set the real values in Vercel (Project → Settings → Environment Variables)
+ * and locally in .env.local (gitignored). See .env.local.example.
+ * NEXT_PUBLIC_ prefix = inlined at build time (the site displays them anyway;
+ * this keeps them out of the SOURCE, not off the page).
+ */
 export const profile = {
-  name: "Alex Rivera", // [PLACEHOLDER]
+  name: process.env.NEXT_PUBLIC_OWNER_NAME ?? "Alex Rivera",
   role: "Full-Stack Developer",
   tagline: "I build products that work the night shift.",
-  location: "The City", // [PLACEHOLDER]
-  email: "hello@example.com", // [PLACEHOLDER]
+  location: process.env.NEXT_PUBLIC_OWNER_LOCATION ?? "The City",
+  email: process.env.NEXT_PUBLIC_OWNER_EMAIL ?? "hello@example.com",
   status: "OPEN TO WORK", // shown as a dossier stamp
   socials: [
     { label: "GitHub", href: "https://github.com/Db2203" },
-    { label: "LinkedIn", href: "https://linkedin.com" }, // [PLACEHOLDER]
-    { label: "Read.cv", href: "https://read.cv" }, // [PLACEHOLDER]
+    {
+      label: "LinkedIn",
+      href: process.env.NEXT_PUBLIC_LINKEDIN_URL ?? "https://linkedin.com",
+    },
+    {
+      label: "Read.cv",
+      href: process.env.NEXT_PUBLIC_READCV_URL ?? "https://read.cv",
+    },
   ],
 };
 
@@ -38,7 +52,7 @@ export const about = {
   intro:
     "Equal parts engineer and investigator — the kind of suspect who profiles half a million collision records in the morning and obsesses over a spring curve at night.",
   fields: [
-    { label: "SUBJECT", value: "Alex Rivera" }, // [PLACEHOLDER]
+    { label: "SUBJECT", value: profile.name }, // follows the env-configured name
     { label: "KNOWN ALIASES", value: "The Data Wrangler. The Full-Stack Builder." },
     { label: "LAST SEEN", value: "Shipping at 2:47 AM" },
     { label: "MOTIVE", value: "Real problems, measurable outcomes" },
