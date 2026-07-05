@@ -10,7 +10,7 @@
  * the night / the city / the detective. Keep that voice when editing.
  */
 
-export const siteUrl = "https://example.com"; // [PLACEHOLDER] set your deployed URL
+export const siteUrl = "https://casefile-bay.vercel.app";
 
 export const profile = {
   name: "Alex Rivera", // [PLACEHOLDER]
