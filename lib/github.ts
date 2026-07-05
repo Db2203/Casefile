@@ -67,37 +67,43 @@ export async function getSurveillance(): Promise<Surveillance | null> {
       : null;
 
     /* ── recent public activity ────────────────────────────────── */
+    // The UNAUTHENTICATED events API strips payload details (no commit
+    // counts, no ref types) — so we report what's reliably present: the
+    // number of PUSHES per repo per day, plus PR activity.
     const activity: ActivityEntry[] = [];
     if (eventsRes.ok) {
       type GhEvent = {
         type: string;
         created_at: string;
         repo?: { name?: string };
-        payload?: { commits?: unknown[]; action?: string; ref_type?: string };
       };
       const events = (await eventsRes.json()) as GhEvent[];
+      const pushTotals = new Map<string, ActivityEntry & { n: number }>();
+
       for (const ev of events) {
-        if (activity.length >= 4) break;
         const repo = ev.repo?.name ?? "";
         const date = ev.created_at?.slice(0, 10) ?? "";
         if (!repo || !date) continue;
+
         if (ev.type === "PushEvent") {
-          const n = ev.payload?.commits?.length ?? 0;
-          activity.push({
-            date,
-            text: `PUSHED ${n} COMMIT${n === 1 ? "" : "S"}`,
-            repo,
-          });
+          const key = `${date}|${repo}`;
+          const existing = pushTotals.get(key);
+          if (existing) existing.n += 1;
+          else pushTotals.set(key, { date, text: "", repo, n: 1 });
         } else if (ev.type === "PullRequestEvent") {
-          activity.push({
-            date,
-            text: `${(ev.payload?.action ?? "opened").toUpperCase()} PULL REQUEST`,
-            repo,
-          });
-        } else if (ev.type === "CreateEvent" && ev.payload?.ref_type === "repository") {
-          activity.push({ date, text: "OPENED NEW CASE", repo });
+          activity.push({ date, text: "PULL REQUEST ACTIVITY", repo });
         }
       }
+
+      for (const p of pushTotals.values()) {
+        activity.push({
+          date: p.date,
+          text: p.n === 1 ? "PUSHED WORK" : `PUSHED ×${p.n}`,
+          repo: p.repo,
+        });
+      }
+      activity.sort((a, b) => b.date.localeCompare(a.date));
+      activity.splice(4);
     }
 
     /* ── repo count ────────────────────────────────────────────── */
