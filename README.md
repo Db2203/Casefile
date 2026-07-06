@@ -5,7 +5,7 @@ amber light, and every project shows up as a case on record. It runs on
 Next.js 16, React 19 and TypeScript, and I spent most of the time on how it
 feels to actually move around.
 
-Live: https://casefile-bay.vercel.app
+Live: linked in the About panel at the top of this repo.
 
 ## What's worth a look
 

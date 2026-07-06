@@ -10,13 +10,17 @@
  * the night / the city / the detective. Keep that voice when editing.
  */
 
-// Site's public URL — drives canonical, OG, sitemap, robots, JSON-LD. Set
-// NEXT_PUBLIC_SITE_URL in Vercel to change domains with no code edit. Normalized
-// so a value with a trailing slash or a missing protocol still works (it feeds
-// `new URL(...)` in the metadata layer, which would otherwise throw).
+// Site's public URL, used for canonical links, OG tags, sitemap, robots, and
+// JSON-LD. On Vercel it auto-follows the current production domain (via the
+// VERCEL_PROJECT_PRODUCTION_URL system variable), so changing domains needs no
+// code edit and no env var. Set NEXT_PUBLIC_SITE_URL only to force a specific
+// URL. Normalized so a missing protocol or trailing slash still works (it feeds
+// new URL() in the metadata layer, which would otherwise throw).
 export const siteUrl = (() => {
   const raw = (
-    process.env.NEXT_PUBLIC_SITE_URL || "https://casefile-bay.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    process.env.VERCEL_PROJECT_PRODUCTION_URL ||
+    "localhost:3000"
   )
     .trim()
     .replace(/\/+$/, "");
