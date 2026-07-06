@@ -1,53 +1,59 @@
 # 🦇 Case Archive — a Batman-noir portfolio
 
-A noir, interaction-heavy portfolio built with **Next.js 16 + React 19 +
-TypeScript**, styled as a detective's case archive: near-black city, one amber
-signal, and a file for every project.
+My portfolio, built as a detective's case file: the city's dark, there's one
+amber light, and every project is a case on record. Next.js 16 + React 19 +
+TypeScript underneath, with a lot of time spent on how the thing actually
+*feels* to move through.
 
-**Live demo:** _deploying soon_
+**Live:** https://casefile-bay.vercel.app
 
-## The interesting parts
+## What's worth a look
 
-- **Flashlight hero** — the page opens in the dark; your cursor is the light.
-  A 260vmax gradient layer moved with `transform` only (composite-only, zero
-  React re-renders per mousemove). Touch devices get an auto-roaming beam.
-- **One-rAF discipline** — Lenis smooth scroll rides Framer Motion's frame
-  loop; every playground demo runs a single rAF gated by IntersectionObserver
-  + `visibilitychange` (scroll away and everything pauses).
-- **WAYNE TERMINAL** — a zero-dependency command palette (Ctrl/Cmd+K) with the
-  full combobox ARIA pattern: fuzzy search, keyboard nav, focus trap/restore.
-- **Procedural everything** — no image or audio assets: textures are CSS,
-  evidence art is seeded deterministic SVG (hydration-stable), and the ambient
-  rain + thunder are synthesized with the Web Audio API (filtered noise +
-  brown-noise bursts).
-- **Live playground gadgets** — variable-font kinetic type, a pointer-gravity
-  particle field, a click-to-rebuild procedural skyline, velocity-reactive
-  static.
-- **Detective Mode** — press `D`: a scan overlay annotates how each section is
-  engineered.
-- **Progressive enhancement, properly** — all content is server-rendered
-  semantic HTML (SSG case-study pages, JSON-LD, sitemap); the atmosphere is a
-  client layer gated on pointer/motion capability, with full reduced-motion
-  fallbacks. Lighthouse: 90+ across the board.
+- **The flashlight.** The page loads in the dark and your cursor is the only
+  light — drag it around to read. It's one gradient layer moved with `transform`
+  (so nothing re-renders while the mouse moves), and on phones the beam roams on
+  its own.
+- **Case files, not a project list.** Each project is a redacted dossier that
+  declassifies as you read it, with its own case-study page — real numbers, no
+  filler.
+- **The Interrogation Room.** Rather than read a bio, you can question the
+  archive: a streaming chat that only knows what's on record, grounded strictly
+  on the site's own data and built to refuse anything off-topic. Zero
+  client-side dependencies, with a provider fallback so it stays up.
+- **Wayne Terminal.** A command palette (Ctrl/Cmd+K) I wrote from scratch —
+  fuzzy search, full keyboard navigation, and the proper combobox ARIA with
+  focus trap and restore.
+- **No image or audio files.** Every texture is CSS, the evidence art is seeded
+  SVG that stays identical across server and client renders, and the ambient
+  rain and thunder are synthesized live with the Web Audio API.
+- **Detective Mode.** Press `D` and the page annotates how each section is
+  actually put together.
+- **Surveillance Log.** A live read of my public GitHub activity, pulled at
+  build time — the real record, not a screenshot.
 
-## Stack
+Under all the atmosphere it's plain server-rendered HTML: static case-study
+pages, JSON-LD, a sitemap, and complete reduced-motion fallbacks, so it still
+works (and still ranks) with every effect turned off. Lighthouse lands around
+90 / 100 / 100 / 100.
 
-Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 ·
-Motion (Framer Motion 12) · Lenis · Zustand
+## Built with
 
-## Run it
+Next.js 16 (App Router) · React 19 · TypeScript · Tailwind CSS v4 · Motion 12 ·
+Lenis · Zustand. No UI kit — the components, the palette, and the audio are all
+hand-rolled.
+
+## Running it locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Configuration
-
-Owner identity (name, email, links) is injected via environment variables —
-see `.env.local.example`. Unset variables fall back to the placeholder
-persona, so the project runs out of the box.
+Identity (name, email, links, site URL) and the Interrogation Room's key come
+from environment variables — copy `.env.local.example` to `.env.local` and fill
+in what you like. Everything falls back to a placeholder persona, so it runs out
+of the box with nothing set.
 
 ## Easter eggs
 
-Classified. (Try typing something a certain vigilante would answer to.)
+A couple. One of them answers to a certain vigilante's name.
