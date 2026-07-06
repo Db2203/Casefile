@@ -7,7 +7,7 @@ replaces its procedural placeholder art — no code changes needed.
 
 Current slots (from `lib/content.ts`) — ✓ filled, ▢ still placeholder art:
 
-- ✓ `saferoute-map` · ✓ `saferoute-risk` · ▢ `saferoute-pipeline`
+- ✓ `saferoute-map` · ✓ `saferoute-risk` · ✓ `saferoute-pipeline`
 - ✓ `noscalp-drop` · ✓ `noscalp-stampede` · ✓ `noscalp-schema`
 - ▢ `photonest-library` · ▢ `photonest-arch` · ▢ `photonest-auth`
 - ✓ `redditrecbuds-ranking` · ✓ `redditrecbuds-app` · ✓ `redditrecbuds-pipeline`

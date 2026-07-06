@@ -147,8 +147,8 @@ export const projects: Project[] = [
         "The system answers the question no map app would: 'how much safety does speed cost?' A typical result — 62% lower collision-risk exposure for 19 extra minutes — turns an invisible gamble into an informed choice.",
       evidence: [
         { id: "map", kind: "skyline", caption: "Fastest vs safest, side by side" },
-        { id: "risk", kind: "graph", caption: "Per-segment risk scoring" },
-        { id: "pipeline", kind: "blueprint", caption: "STATS19 → PostGIS pipeline" },
+        { id: "risk", kind: "graph", caption: "Collision-risk analytics dashboard" },
+        { id: "pipeline", kind: "blueprint", caption: "One pipeline, two cities: routing + analytics" },
       ],
       impact: [
         { value: "123,576", label: "COLLISIONS ANALYZED" },
