@@ -1,6 +1,6 @@
 /**
- * Procedural art-deco skyline data — shared by the static Skyline layers,
- * the Night-City playground demo, and evidence placeholder art.
+ * Procedural art-deco skyline data — shared by the static Skyline layers
+ * and evidence placeholder art.
  * Pure data (no JSX); pair with <SkylineLayer> from atmosphere/Skyline.
  */
 import { range } from "./random";

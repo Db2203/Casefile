@@ -1,8 +1,7 @@
 /**
  * Seeded, deterministic RNG — same seed produces the same sequence on server
  * and client, so procedural SVG art can be server-rendered with zero
- * hydration mismatch. Used by evidence placeholders, the Night-City demo,
- * and skyline generation.
+ * hydration mismatch. Used by evidence placeholder art and skyline generation.
  */
 
 /** Hash a string into a 32-bit seed. */

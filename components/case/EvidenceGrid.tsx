@@ -13,7 +13,7 @@ const LETTERS = ["A", "B", "C", "D", "E"];
 /**
  * EVIDENCE — exhibit grid. Click an exhibit to examine it in a lightbox
  * (Escape / backdrop closes; focus is trapped on the close button and
- * restored on close). Placeholder art now; real screenshots slot in later.
+ * restored on close). Shows real screenshots when present, procedural art otherwise.
  */
 export default function EvidenceGrid({
   project,
