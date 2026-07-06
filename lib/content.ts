@@ -10,7 +10,18 @@
  * the night / the city / the detective. Keep that voice when editing.
  */
 
-export const siteUrl = "https://casefile-bay.vercel.app";
+// Site's public URL — drives canonical, OG, sitemap, robots, JSON-LD. Set
+// NEXT_PUBLIC_SITE_URL in Vercel to change domains with no code edit. Normalized
+// so a value with a trailing slash or a missing protocol still works (it feeds
+// `new URL(...)` in the metadata layer, which would otherwise throw).
+export const siteUrl = (() => {
+  const raw = (
+    process.env.NEXT_PUBLIC_SITE_URL || "https://casefile-bay.vercel.app"
+  )
+    .trim()
+    .replace(/\/+$/, "");
+  return /^https?:\/\//i.test(raw) ? raw : `https://${raw}`;
+})();
 
 /**
  * Personal info comes from ENVIRONMENT VARIABLES so this public repo never
