@@ -10,7 +10,7 @@ Current slots (from `lib/content.ts`) — ✓ filled, ▢ still placeholder art:
 - ✓ `saferoute-map` · ✓ `saferoute-risk` · ▢ `saferoute-pipeline`
 - ✓ `noscalp-drop` · ✓ `noscalp-stampede` · ✓ `noscalp-schema`
 - ▢ `photonest-library` · ▢ `photonest-arch` · ▢ `photonest-auth`
-- ▢ `redditrecbuds-ranking` · ▢ `redditrecbuds-app` · ▢ `redditrecbuds-pipeline`
+- ✓ `redditrecbuds-ranking` · ✓ `redditrecbuds-app` · ✓ `redditrecbuds-pipeline`
 
 The ▢ slots have no screenshot in their source repo, so they still show
 the procedural placeholder. Add a screenshot with the matching name to fill

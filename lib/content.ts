@@ -274,7 +274,7 @@ export const projects: Project[] = [
       "A wireless-earbud recommender mined from r/Earbuds. LLMs (Llama 3.1 via Groq, Gemini 2.5 Flash) extract product mentions and sentiment from raw comments; user-level dedup and a volume-plus-confidence blend rank what the community actually trusts. Live on Streamlit.",
     tags: ["Python", "Groq / Gemini", "DuckDB"],
     repo: "https://github.com/Db2203/redditrecbuds",
-    // link: "" — [VERIFY] add the live Streamlit URL
+    link: "https://redditrecbuds.streamlit.app",
     status: "LIVE — DEPLOYED",
     caseStudy: {
       context:
