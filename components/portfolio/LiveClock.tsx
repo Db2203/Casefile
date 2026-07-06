@@ -41,7 +41,7 @@ export default function LiveClock() {
 
   return (
     <span className="tabular-nums">
-      <span className="text-signal">{hh}:{mm}</span> — {status}
+      <span className="text-signal">{hh}:{mm}</span> · {status}
     </span>
   );
 }

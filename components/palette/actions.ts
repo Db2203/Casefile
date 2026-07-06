@@ -28,12 +28,12 @@ export interface PaletteDeps {
 }
 
 const SECTIONS: { id: string; label: string }[] = [
-  { id: "top", label: "TOP — THE ROOFTOP" },
-  { id: "work", label: "CASES — SELECTED WORK" },
-  { id: "about", label: "DOSSIER — ABOUT" },
-  { id: "interrogate", label: "INTERROGATE — QUESTION THE RECORD" },
-  { id: "log", label: "STAKEOUT — SURVEILLANCE LOG" },
-  { id: "contact", label: "SIGNAL — CONTACT" },
+  { id: "top", label: "TOP · THE ROOFTOP" },
+  { id: "work", label: "CASES · SELECTED WORK" },
+  { id: "about", label: "DOSSIER · ABOUT" },
+  { id: "interrogate", label: "INTERROGATE · QUESTION THE RECORD" },
+  { id: "log", label: "STAKEOUT · SURVEILLANCE LOG" },
+  { id: "contact", label: "SIGNAL · CONTACT" },
 ];
 
 export function buildActions(d: PaletteDeps): PaletteAction[] {
@@ -51,7 +51,7 @@ export function buildActions(d: PaletteDeps): PaletteAction[] {
   for (const p of projects) {
     actions.push({
       id: `case-${p.id}`,
-      label: `CASE #${p.caseNo} — ${p.title}`,
+      label: `CASE #${p.caseNo} · ${p.title}`,
       hint: p.category.toUpperCase(),
       group: "CASE FILES",
       run: () => d.openCase(p.id),
@@ -68,7 +68,7 @@ export function buildActions(d: PaletteDeps): PaletteAction[] {
   if (d.canEnhance) {
     actions.push({
       id: "sys-lights",
-      label: d.lightsOn ? "LIGHTS OFF — RESTORE THE DARK" : "LIGHTS ON — FULL VISIBILITY",
+      label: d.lightsOn ? "LIGHTS OFF · RESTORE THE DARK" : "LIGHTS ON · FULL VISIBILITY",
       group: "SYSTEMS",
       run: d.toggleLights,
     });

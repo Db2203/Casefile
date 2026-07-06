@@ -88,7 +88,7 @@ export default function KonamiEgg() {
           >
             <BatMark className="w-44 text-signal drop-shadow-[0_0_36px_rgba(245,178,26,0.6)]" />
             <p className="font-mono text-[11px] tracking-[0.4em] text-signal">
-              YOU FOUND THE SIGNAL — WE&apos;LL BE IN TOUCH.
+              YOU FOUND THE SIGNAL. WE&apos;LL BE IN TOUCH.
             </p>
           </motion.div>
         </motion.div>

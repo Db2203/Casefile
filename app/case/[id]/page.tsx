@@ -27,10 +27,10 @@ export async function generateMetadata({
   const project = projects.find((p) => p.id === id);
   if (!project) return {};
   return {
-    title: `Case #${project.caseNo} — ${project.title}`,
+    title: `Case #${project.caseNo} · ${project.title}`,
     description: project.summary,
     openGraph: {
-      title: `Case #${project.caseNo} — ${project.title}`,
+      title: `Case #${project.caseNo} · ${project.title}`,
       description: project.summary,
       url: `${siteUrl}/case/${project.id}`,
     },
@@ -95,7 +95,7 @@ export default async function CasePage({
 
           {/* dossier hero */}
           <section className="py-12 sm:py-24">
-            <Kicker as="p">CASE #{project.caseNo} — {project.year}</Kicker>
+            <Kicker as="p">CASE #{project.caseNo} · {project.year}</Kicker>
             <h1 className="display text-[clamp(3rem,10vw,8rem)] text-bone">
               {project.title}
             </h1>
@@ -134,21 +134,21 @@ export default async function CasePage({
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>01 — CONTEXT</Kicker>
+              <Kicker>01 · CONTEXT</Kicker>
               <Body>{cs.context}</Body>
             </Reveal>
           </section>
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>02 — THE PROBLEM</Kicker>
+              <Kicker>02 · THE PROBLEM</Kicker>
               <Body>{cs.problem}</Body>
             </Reveal>
           </section>
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>03 — INVESTIGATION</Kicker>
+              <Kicker>03 · INVESTIGATION</Kicker>
             </Reveal>
             <div className="mt-8">
               <CaseTimeline steps={cs.investigation} />
@@ -157,14 +157,14 @@ export default async function CasePage({
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>04 — RESOLUTION</Kicker>
+              <Kicker>04 · RESOLUTION</Kicker>
               <Body>{cs.resolution}</Body>
             </Reveal>
           </section>
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>05 — EVIDENCE</Kicker>
+              <Kicker>05 · EVIDENCE</Kicker>
             </Reveal>
             <div className="mt-8">
               <EvidenceGrid
@@ -176,7 +176,7 @@ export default async function CasePage({
 
           <section className="border-t border-slate/40 py-10 sm:py-14">
             <Reveal>
-              <Kicker>06 — IMPACT</Kicker>
+              <Kicker>06 · IMPACT</Kicker>
             </Reveal>
             <div className="mt-8">
               <ImpactStats stats={cs.impact} />

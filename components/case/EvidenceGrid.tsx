@@ -126,7 +126,7 @@ export default function EvidenceGrid({
                   <span className="text-signal">
                     EXHIBIT {LETTERS[openIdx] ?? openIdx + 1}
                   </span>{" "}
-                  — {current.caption.toUpperCase()}
+                  · {current.caption.toUpperCase()}
                 </span>
                 <button
                   ref={closeRef}

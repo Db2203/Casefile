@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { profile, hero } from "@/lib/content";
 import { BAT_PATH } from "@/components/atmosphere/BatMark";
 
-export const alt = `${profile.name} — ${profile.role}`;
+export const alt = `${profile.name} · ${profile.role}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -78,7 +78,7 @@ export default function OgImage() {
         </div>
 
         <div style={{ display: "flex", fontSize: 20, letterSpacing: 6, color: "#99a1b0" }}>
-          {`${profile.role.toUpperCase()} — BUILT AFTER DARK`}
+          {`${profile.role.toUpperCase()} · BUILT AFTER DARK`}
         </div>
       </div>
     ),

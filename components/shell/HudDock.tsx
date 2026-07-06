@@ -21,7 +21,7 @@ export default function HudDock() {
         onClick={() => setPaletteOpen(true)}
         className="rounded-sm border border-slate bg-void/60 px-3 py-2 font-mono text-[10px] tracking-[0.25em] text-ash backdrop-blur transition-colors hover:border-signal hover:text-signal"
       >
-        <span className="hidden sm:inline">CTRL+K — </span>TERMINAL
+        <span className="hidden sm:inline">CTRL+K · </span>TERMINAL
       </button>
       <DetectiveButton />
     </div>

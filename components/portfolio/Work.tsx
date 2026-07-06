@@ -26,7 +26,7 @@ export default function Work() {
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">
-            01 — SELECTED WORK
+            01 · SELECTED WORK
           </p>
           <h2 className="display mb-4 text-5xl text-bone sm:text-7xl">
             Case Files

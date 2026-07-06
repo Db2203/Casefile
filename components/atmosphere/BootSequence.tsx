@@ -105,7 +105,7 @@ export default function BootSequence() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.9 }}
           >
-            {profile.name.toUpperCase()} — CASE ARCHIVE ·{" "}
+            {profile.name.toUpperCase()} · CASE ARCHIVE ·{" "}
             <span className="[@media(hover:none)]:hidden">CLICK TO SKIP</span>
             <span className="hidden [@media(hover:none)]:inline">
               TAP TO SKIP

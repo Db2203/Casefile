@@ -227,7 +227,7 @@ export default function CommandPalette() {
             {/* title bar */}
             <div className="flex items-center justify-between border-b border-slate/60 bg-void/60 px-4 py-2 font-mono text-[9px] tracking-[0.3em] text-ash">
               <span>
-                WAYNE TERMINAL v3.7 —{" "}
+                WAYNE TERMINAL v3.7 ·{" "}
                 <span className="text-signal">AUTHORIZED</span>
               </span>
               <span className="flex items-center gap-3">
@@ -281,7 +281,7 @@ export default function CommandPalette() {
             >
               {flat.length === 0 && (
                 <p className="px-4 py-6 text-center font-mono text-xs tracking-[0.25em] text-ash">
-                  NO RECORDS MATCH — THE TRAIL WENT COLD
+                  NO RECORDS MATCH · THE TRAIL WENT COLD
                 </p>
               )}
               {GROUP_ORDER.map((group) => {

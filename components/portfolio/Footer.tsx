@@ -7,7 +7,7 @@ export default function Footer() {
     <footer className="border-t border-slate/40 py-10">
       <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-6 font-mono text-[10px] tracking-[0.25em] text-ash sm:flex-row sm:justify-between sm:px-10">
         <span className="flex items-center gap-3">
-          <BatMark className="w-6 text-slate" />© {profile.name.toUpperCase()} —
+          <BatMark className="w-6 text-slate" />© {profile.name.toUpperCase()} ·
           BUILT AFTER DARK
         </span>
         <LiveClock />

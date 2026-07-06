@@ -30,7 +30,7 @@ export default function Annotation({
           className={`pointer-events-none z-30 max-w-xs border-l-2 border-scan bg-void/85 p-3 font-mono text-[10px] leading-relaxed tracking-wide text-scan backdrop-blur ${className ?? ""}`}
         >
           <span className="mb-1 block text-[9px] tracking-[0.3em] opacity-70">
-            ▸ SCAN — HOW IT&apos;S BUILT
+            ▸ SCAN · HOW IT&apos;S BUILT
           </span>
           {text}
         </motion.aside>

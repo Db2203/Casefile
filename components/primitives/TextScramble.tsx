@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useInView, useReducedMotion } from "motion/react";
 
-const GLYPHS = "!<>-_\\/[]{}—=+*^?#█▓▒░";
+const GLYPHS = "!<>-_\\/[]{}=+*^?#█▓▒░";
 
 /**
  * Decrypt effect: text resolves out of glyph noise, letter by letter, when it

@@ -16,7 +16,7 @@ export default function About() {
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">
-            02 — {about.heading}
+            02 · {about.heading}
           </p>
           <h2 className="display mb-14 text-5xl text-bone sm:text-7xl">
             Know Your

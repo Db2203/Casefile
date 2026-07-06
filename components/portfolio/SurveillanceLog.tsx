@@ -57,7 +57,7 @@ export default async function SurveillanceLog() {
       <div className="relative mx-auto max-w-6xl px-6 sm:px-10">
         <Reveal>
           <p className="mb-2 font-mono text-[11px] tracking-[0.35em] text-signal">
-            04 — SURVEILLANCE LOG
+            04 · SURVEILLANCE LOG
           </p>
           <h2 className="display mb-4 text-5xl text-bone sm:text-7xl">
             The
@@ -66,7 +66,7 @@ export default async function SurveillanceLog() {
           </h2>
           <p className="mb-12 max-w-md leading-relaxed text-bone/80">
             Twelve months of activity, on the record. Straight from the public
-            GitHub feed — evidence doesn&apos;t take nights off.
+            GitHub feed. Evidence doesn&apos;t take nights off.
           </p>
         </Reveal>
 
@@ -83,7 +83,7 @@ export default async function SurveillanceLog() {
                     <span className="text-signal">
                       {data.totalContributions.toLocaleString()}
                     </span>{" "}
-                    CONTRIBUTIONS — LAST 12 MONTHS
+                    CONTRIBUTIONS · LAST 12 MONTHS
                   </>
                 )}
               </span>
@@ -128,7 +128,7 @@ export default async function SurveillanceLog() {
                   OPEN FILES
                 </p>
                 <p className="display text-4xl text-signal">
-                  {data.publicRepos ?? "—"}
+                  {data.publicRepos ?? "-"}
                 </p>
                 <p className="font-mono text-[10px] tracking-[0.25em] text-ash">
                   PUBLIC REPOSITORIES

@@ -60,7 +60,7 @@ export default function EvidencePlaceholder({
         fontFamily="monospace"
         letterSpacing="1.5"
       >
-        EVIDENCE — {seed.toUpperCase().slice(0, 14)}
+        EVIDENCE · {seed.toUpperCase().slice(0, 14)}
       </text>
     </svg>
   );

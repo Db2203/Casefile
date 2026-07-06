@@ -103,12 +103,12 @@ const PROMPT_FRAGMENTS = [
   "noir records system",
   "you know only the record",
   "plain text only",
-  "style — strict",
+  "style (strict)",
   "style - strict",
   "never use markdown",
   "clipped noir",
   "hard limit: 90",
-  "security — absolute",
+  "security (absolute)",
   "gsk_",
   "groq_api_key",
   "gemini_api_key",
@@ -129,13 +129,13 @@ function sealed(text: string, status = 400) {
 export async function POST(req: Request) {
   const providers = providerChain();
   if (providers.length === 0) {
-    return sealed("THE ARCHIVE IS SEALED — interrogation offline.", 503);
+    return sealed("THE ARCHIVE IS SEALED. Interrogation offline.", 503);
   }
 
   const ip =
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   if (throttled(ip)) {
-    return sealed("EASY, DETECTIVE. Too many questions — give it a minute.", 429);
+    return sealed("EASY, DETECTIVE. Too many questions, give it a minute.", 429);
   }
 
   let messages: ChatMessage[];

@@ -27,7 +27,7 @@ const jbmono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${profile.name} — ${profile.role}`,
+    default: `${profile.name} · ${profile.role}`,
     template: `%s · ${profile.name}`,
   },
   description: profile.tagline,
@@ -43,14 +43,14 @@ export const metadata: Metadata = {
   authors: [{ name: profile.name }],
   openGraph: {
     type: "website",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} · ${profile.role}`,
     description: profile.tagline,
     url: siteUrl,
     siteName: profile.name,
   },
   twitter: {
     card: "summary_large_image",
-    title: `${profile.name} — ${profile.role}`,
+    title: `${profile.name} · ${profile.role}`,
     description: profile.tagline,
   },
 };

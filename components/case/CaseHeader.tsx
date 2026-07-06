@@ -10,7 +10,7 @@ export default function CaseHeader({ project }: { project: Project }) {
           ← ALL CASES
         </Link>
         <span className="hidden truncate sm:block">
-          CASE #{project.caseNo} — {project.title}
+          CASE #{project.caseNo} · {project.title}
         </span>
         <span className="stamp shrink-0 text-signal">{project.status}</span>
       </div>

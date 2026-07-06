@@ -150,7 +150,7 @@ export default function CaseCard({
               className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-bone"
             >
               OPEN CASE FILE ↗
-              <span className="sr-only"> — {project.title}</span>
+              <span className="sr-only">, {project.title}</span>
             </Link>
             <a
               href={project.repo}
@@ -159,7 +159,7 @@ export default function CaseCard({
               className="link-wipe inline-block font-mono text-xs tracking-[0.2em] text-ash"
             >
               VIEW CODE ↗
-              <span className="sr-only"> — {project.title} on GitHub</span>
+              <span className="sr-only">, {project.title} on GitHub</span>
             </a>
             {project.link && (
               <a

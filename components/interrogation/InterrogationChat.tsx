@@ -14,7 +14,7 @@ const MAX_CHARS = 280;
 const OPENING: Msg = {
   role: "assistant",
   content:
-    "THE ARCHIVE IS LISTENING. Ask about the subject — the cases, the skills, whether they're worth hiring. Everything on record is fair game.",
+    "THE ARCHIVE IS LISTENING. Ask about the subject: the cases, the skills, whether they're worth hiring. Everything on record is fair game.",
 };
 
 /**
@@ -101,7 +101,7 @@ export default function InterrogationChat({
       {/* room header */}
       <div className="flex items-center justify-between border-b border-slate/60 bg-void/60 px-4 py-2 font-mono text-[9px] tracking-[0.3em] text-ash">
         <span>
-          INTERROGATION ROOM 3 —{" "}
+          INTERROGATION ROOM 3 ·{" "}
           <span className="text-signal">RECORDING</span>
         </span>
         <span className="flex items-center gap-1.5" aria-hidden>
@@ -173,7 +173,7 @@ export default function InterrogationChat({
           disabled={busy || exhausted}
           placeholder={
             exhausted
-              ? "SESSION LIMIT REACHED — SEND THE SIGNAL INSTEAD"
+              ? "SESSION LIMIT REACHED · SEND THE SIGNAL INSTEAD"
               : "ASK THE ARCHIVE…"
           }
           aria-label="Ask the archive a question"
