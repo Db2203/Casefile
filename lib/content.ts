@@ -43,24 +43,24 @@ export const profile = {
 export const hero = {
   kicker: "CASE ARCHIVE — CLASSIFIED",
   lines: ["EVERY GREAT", "BUILD STARTS", "IN THE DARK."],
-  sub: "Full-stack developer and data wrangler. I take messy real-world problems, interrogate the data, and ship products with an alibi for every decision.",
+  sub: "Full-stack developer and data wrangler. Hand me a messy real-world problem and I'll dig into the data behind it, then ship something I can defend line by line.",
   hint: "move the light to read · scroll to descend",
 };
 
 export const about = {
   heading: "SUBJECT DOSSIER",
   intro:
-    "Equal parts engineer and investigator — the kind of suspect who profiles half a million collision records in the morning and obsesses over a spring curve at night.",
+    "Engineer with a detective's habits. I'll comb half a million collision records looking for one pattern, then lose an afternoon on the spring curve of a single animation until it feels right.",
   fields: [
     { label: "SUBJECT", value: profile.name }, // follows the env-configured name
     { label: "KNOWN ALIASES", value: "The Data Wrangler. The Full-Stack Builder." },
     { label: "COMMENDATIONS", value: "3× first place — competitive hackathons" },
     { label: "LAST SEEN", value: "Shipping at 2:47 AM" },
-    { label: "MOTIVE", value: "Real problems, measurable outcomes" },
+    { label: "MOTIVE", value: "Real problems, and proof they got solved" },
   ],
   paragraphs: [
-    "My work runs the stack top to bottom: ML pipelines over public datasets, FastAPI backends with real auth stories, distributed SQL under stampede load, and the React frontends that make it all usable. Most of it starts with a question nobody had a good answer for — how unsafe is the fast route home? can a drop be provably fair?",
-    "I also treat the frontend as a craft, not an afterthought. Exhibit A: this site — every texture is CSS or seeded SVG, every animation runs on one budgeted frame loop, and the whole case archive is server-rendered underneath the noir.",
+    "Most of what I build starts with a question I couldn't find a straight answer to. How dangerous is the fast route home? Can a product drop stay fair with bots in the room? Chasing those has pulled me across the whole stack — ML pipelines on public datasets, FastAPI backends with auth built for the open internet, distributed SQL under stampede load, and the React front ends that tie it all together.",
+    "The frontend gets the same attention as everything behind it. This site is the example: the textures are CSS or generated SVG, the motion runs on one frame loop I keep on a strict budget, and under all the noir it's server-rendered HTML a crawler can read start to finish.",
   ],
   skills: [
     "Python",
@@ -121,45 +121,45 @@ export const projects: Project[] = [
     year: "2026",
     category: "Geospatial ML + Full-Stack",
     summary:
-      "The fast route home hides its danger — an ML pipeline over 510k collisions in London and Dubai puts a number on it: 62% less risk for 19 extra minutes, plus the judgment to know where routing can't help.",
+      "The fastest route home is usually the most dangerous one, and across 510k collision records in London and Dubai that trade-off finally has a number. London: 62% less risk for 19 extra minutes. Dubai: the same idea didn't survive contact with the data.",
     description:
-      "Safety-aware navigation and road-safety analytics across two cities. The same pipeline turns five years of UK STATS19 data into London's fastest-vs-safest routing — then, tested on eight years of Dubai Police data, pivots to analytics when the road network offers no safer alternative.",
+      "Safety-aware navigation, tried in two cities. One pipeline turns five years of UK STATS19 data into London's fastest-vs-safest routing. Pointed at eight years of Dubai Police data, the routing idea came apart — so the Dubai build became a road-safety analytics dashboard instead.",
     tags: ["Python / scikit-learn", "PostGIS", "Next.js + Leaflet"],
     repo: "https://github.com/Db2203/saferoute",
     status: "CASE CLOSED",
     caseStudy: {
       context:
-        "Every navigation app optimizes for time. None will tell you the ten-minutes-faster route runs through the most collision-dense streets in the city. The data to answer that exists — the UK and Dubai both publish police-recorded collisions — it just wasn't wired into routing. The harder question came later: does safety-aware routing even work everywhere?",
+        "Every navigation app optimizes for time. None of them mention that the ten-minutes-faster route cuts through the city's worst streets for crashes. The data to prove it is public — both the UK and Dubai release police-recorded collisions — it just was never wired into a router. The question I didn't see coming showed up later: does this even work in every city?",
       problem:
-        "Turn years of raw collision records into something a router can reason about — which segments are dangerous, in what conditions, and what a driver gives up to avoid them. Then stress-test the idea on a second city with a very different road network, and be willing to change the answer if the data demands it.",
+        "Turn years of raw collision records into something a router can use: which roads are dangerous, under what conditions, and what a driver trades away to avoid them. Then take the whole idea to a city with a completely different road network, and be willing to admit if it falls apart.",
       investigation: [
         {
           label: "EVIDENCE",
           title: "Profiled half a million collisions",
           detail:
-            "Ingested 503k UK records down to 123,576 geocoded London incidents, plus 386,796 from eight years of Dubai Police data. Built London as a graph with OSMnx: 165,716 nodes, 381,109 edges.",
+            "Started with 503k UK records, narrowed to 123,576 geocoded London incidents, then added 386,796 more from eight years of Dubai Police data. London became a road graph through OSMnx: 165,716 nodes and 381,109 edges.",
         },
         {
           label: "ANALYSIS",
           title: "Found where the city bites",
           detail:
-            "DBSCAN surfaced 1,863 London hotspots. A 200-tree Random Forest learned severity from context — weather, light, road type — and 64,652 road segments got individual risk scores.",
+            "DBSCAN surfaced 1,863 London hotspots. A 200-tree Random Forest learned severity from context — weather, light, road type — and 64,652 road segments each ended up with their own risk score.",
         },
         {
           label: "THE ROUTE",
           title: "Made risk a routing cost",
           detail:
-            "Modified Dijkstra with a tunable risk/time weight (α·time + (1−α)·risk), served by FastAPI over PostGIS. A Next.js + Leaflet frontend draws the fastest and safest routes side by side — 62% less risk for 19 extra minutes.",
+            "A modified Dijkstra weighs risk against time (α·time + (1−α)·risk), served by FastAPI over PostGIS. The Next.js and Leaflet frontend draws the fastest and safest routes side by side: 62% less risk for 19 extra minutes.",
         },
         {
           label: "THE PIVOT",
           title: "Knew when to stop",
           detail:
-            "Ran the same routing idea on Dubai and it failed honestly — collisions blanket ~48% of segments, so fastest and safest come out 0–1% apart. Rather than ship a hollow feature, SafeRoute Dubai became an analytics dashboard: 2,113 blackspots, severity by collision type, and a route-check that flags the danger you'll actually cross.",
+            "The same idea flopped in Dubai, and the data explained why: collisions cover roughly 48% of segments, so the fastest and safest routes land within 0–1% of each other. No sense shipping a feature that changes nothing, so Dubai became an analytics dashboard — 2,113 blackspots, severity broken out by crash type, and a route check that flags the danger you'll actually cross.",
         },
       ],
       resolution:
-        "Two cities, two honest answers. London gets routing that quantifies the gamble no map app will name — 62% lower risk for 19 extra minutes. Dubai gets the intelligence its data can actually support, after routing was tested and rejected. Same pipeline; the judgment to know which product each dataset deserved.",
+        "Two cities, two products from one codebase. London got routing — a hard number on the gamble every map app stays quiet about, 62% less risk for 19 extra minutes. Dubai got analytics, because that's what its data could honestly support. Reading the data well enough to tell those two apart was the real work.",
       evidence: [
         { id: "map", kind: "skyline", caption: "London: fastest vs safest route" },
         { id: "risk", kind: "graph", caption: "Dubai: collision-risk analytics" },
@@ -179,40 +179,40 @@ export const projects: Project[] = [
     year: "2026",
     category: "Distributed Systems + Web",
     summary:
-      "Bots win hyped drops and scalpers resell them — a lottery backed by database invariants held allocation at exactly 100/100 under a 50,000-request stampede.",
+      "Bots win hyped drops; scalpers flip them for profit. NoScalp reframes the whole thing as a lottery and pushes fairness down into the database itself — allocation held at exactly 100 of 100 through a 50,000-request stampede.",
     description:
-      "A provably-fair limited-drops platform (hackathon build, live on Vercel). Fairness isn't a rate-limiter bolted on top — it's enforced as invariants in multi-region Amazon Aurora DSQL: one entry per verified human, exactly-once allocation, overselling structurally impossible.",
+      "A provably-fair limited-drops platform, built at a hackathon and running on Vercel. Rather than bolt a rate-limiter on top, the fairness lives in multi-region Amazon Aurora DSQL: one entry per verified human, exactly-once allocation, and no path to overselling.",
     tags: ["TypeScript", "Aurora DSQL", "Multi-Region"],
     repo: "https://github.com/Db2203/NoScalp",
     link: "https://no-scalp.vercel.app",
     status: "LIVE — HACKATHON BUILD",
     caseStudy: {
       context:
-        "Built for the 'H0: Hack the Zero Stack' hackathon. Limited drops — concert tickets, sneakers — are decided by whoever has the fastest bots, and first-come-first-served rewards exactly the behavior everyone hates. The premise: stop trying to out-race the bots and change the game itself.",
+        "Built for the 'H0: Hack the Zero Stack' hackathon. Limited drops — concert tickets, sneakers — go to whoever runs the fastest bots, and first-come-first-served rewards exactly the behavior everyone hates. So the premise flipped: stop racing the bots, and change what it takes to win.",
       problem:
-        "Design a drop where fairness is a guarantee, not a promise: a random lottery instead of a race, one entry per verified human even against duplicate accounts, and inventory that cannot oversell — even when the whole internet shows up at once, across regions.",
+        "Make a drop that's fair by design: a random draw instead of a speed contest, one entry per real person even against duplicate accounts, and inventory that can't oversell — even with the whole internet showing up at once, across regions.",
       investigation: [
         {
           label: "DESIGN",
-          title: "Fairness as schema, not middleware",
+          title: "Fairness lives in the schema",
           detail:
-            "Inventory modeled as one row per unit — no hot counter to corrupt. Entry dedup via uuidv5-derived primary keys and an HMAC identity index, so a duplicate entry isn't rejected by logic, it's impossible by key.",
+            "Every unit is its own row, so there's no hot counter to race on. Entries dedupe through uuidv5 primary keys and an HMAC identity index — a duplicate doesn't get caught after the fact, the key simply won't let it exist.",
         },
         {
           label: "INFRA",
           title: "Multi-region, active-active",
           detail:
-            "Amazon Aurora DSQL across us-east-1 and us-east-2 with a us-west-2 witness — both regions take writes, with optimistic-concurrency retries handling conflicts.",
+            "Amazon Aurora DSQL spanning us-east-1 and us-east-2 with a us-west-2 witness — both regions accept writes, and optimistic-concurrency retries settle the conflicts.",
         },
         {
           label: "THE STAMPEDE",
           title: "Proved it under fire",
           detail:
-            "A live demo throws a 50,000-request stampede at both architectures: a conventional store oversells to 127/100. NoScalp allocates exactly 100 of 100 — every time, by construction.",
+            "A live demo fires a 50,000-request stampede at both designs. A conventional store oversells to 127/100. NoScalp lands on exactly 100 of 100 — every run, by construction.",
         },
       ],
       resolution:
-        "Deployed and public. The oversell class of bugs isn't handled — it's unrepresentable. The demo makes the argument in one screen: 127/100 versus 100/100.",
+        "Live and public. Overselling isn't a bug the system defends against; it's a state the schema can't represent in the first place. The demo settles the argument on a single screen: 127/100 next to 100/100.",
       evidence: [
         { id: "drop", kind: "ui", caption: "The drop lobby" },
         { id: "stampede", kind: "graph", caption: "50k-request stampede test" },
@@ -232,39 +232,39 @@ export const projects: Project[] = [
     year: "2026",
     category: "Systems + Applied ML",
     summary:
-      "Cloud photo services own your memories — a self-hosted library with CLIP natural-language search and face grouping keeps every byte on your own hardware.",
+      "Cloud photo services quietly own your memories. This is the self-hosted answer — CLIP natural-language search and on-device face grouping, with every byte staying on hardware you control.",
     description:
-      "A privacy-first Google Photos alternative you run yourself: FastAPI + workers index your library, CLIP embeddings in pgvector power natural-language search, InsightFace groups faces locally, and an Expo mobile app backs up your camera roll — with zero third-party clouds.",
+      "A Google Photos alternative you host yourself. FastAPI and background workers index the library, CLIP embeddings in pgvector power natural-language search, InsightFace handles face grouping on your own machine, and an Expo app backs up your camera roll. No third-party cloud ever touches the photos.",
     tags: ["FastAPI", "CLIP + pgvector", "Docker"],
     repo: "https://github.com/Db2203/selfhost",
     status: "ONGOING",
     caseStudy: {
       context:
-        "Photo libraries are the most personal dataset most people have, and the standard deal is handing them to a cloud that scans, mines, and meters them. Self-hosting is the obvious answer — if it can match the two features that keep people locked in: search that understands language, and faces.",
+        "Your photo library is probably the most personal dataset you own, and the usual deal is handing it to a company that scans and monetizes it. Self-hosting is the obvious fix — but only if it can match the two things that keep people on the big services: search that understands plain language, and faces.",
       problem:
-        "Build the whole product, not a demo: index tens of thousands of local photos, search them with sentences ('beach at sunset'), group people locally, sync a phone's camera roll — and secure all of it well enough to expose to the open internet from a homelab.",
+        "Build the real product, not a proof of concept: index tens of thousands of photos, search them with plain sentences like 'beach at sunset', group people on-device, sync a phone's camera roll — and lock it down tightly enough to expose to the open internet from a homelab.",
       investigation: [
         {
           label: "PIPELINE",
-          title: "Stateless core, honest workers",
+          title: "Stateless core, background workers",
           detail:
-            "Stateless FastAPI with arq background workers over Redis; Postgres with pgvector stores CLIP embeddings for semantic search; InsightFace runs face recognition entirely locally. Storage is an abstraction — local filesystem, S3, or MinIO.",
+            "Stateless FastAPI with arq workers over Redis; Postgres with pgvector holds the CLIP embeddings behind semantic search; InsightFace runs face recognition entirely on the box. Storage stays an abstraction — local disk, S3, or MinIO.",
         },
         {
           label: "HARDENING",
           title: "Auth like it's production",
           detail:
-            "Argon2 password hashing, short-lived JWTs with rotating single-use refresh tokens, per-device revocation, and HMAC-signed image URLs — plus Caddy TLS and Tailscale for remote access without exposure.",
+            "Argon2 hashing, short-lived JWTs with rotating single-use refresh tokens, per-device revocation, and HMAC-signed image URLs — with Caddy for TLS and Tailscale for remote access that never opens a port.",
         },
         {
           label: "PROOF",
           title: "Tested against real services",
           detail:
-            "CI runs 47 tests against a real Postgres and a real MinIO — not mocks — so the storage abstraction and auth flows are exercised the way production would hit them. An Expo app handles iOS/Android camera-roll backup.",
+            "CI runs 47 tests against a real Postgres and a real MinIO, not mocks, so the storage abstraction and auth flows get hit the way production would. An Expo app handles camera-roll backup on iOS and Android.",
         },
       ],
       resolution:
-        "A photo library that answers to exactly one person. Ongoing build — the case stays open, and the roadmap (sharing, dedup, more of the index) keeps it that way.",
+        "A photo library that answers to one person — you. Still in progress: sharing, dedup, and more of the indexing pipeline are on the list, which is why this case stays open.",
       evidence: [
         { id: "library", kind: "ui", caption: "Library + semantic search" },
         { id: "arch", kind: "blueprint", caption: "Workers, storage, auth architecture" },
@@ -284,40 +284,40 @@ export const projects: Project[] = [
     year: "2026",
     category: "LLM Data Pipeline",
     summary:
-      "Earbud advice on Reddit is scattered across thousands of comments — an LLM extraction pipeline with Wilson-bound ranking turns r/Earbuds into a trustworthy recommender.",
+      "The good earbud advice on Reddit is real; it's just buried under thousands of comments. This pipeline reads them with LLMs and ranks the results with a Wilson-bound score, turning r/Earbuds into something you can browse.",
     description:
-      "A wireless-earbud recommender mined from r/Earbuds. LLMs (Llama 3.1 via Groq, Gemini 2.5 Flash) extract product mentions and sentiment from raw comments; user-level dedup and a volume-plus-confidence blend rank what the community actually trusts. Live on Streamlit.",
+      "A wireless-earbud recommender built out of r/Earbuds. Two LLMs — Llama 3.1 via Groq and Gemini 2.5 Flash — pull product mentions and sentiment from raw comments; user-level dedup and a volume-plus-confidence blend decide what the community really stands behind. Live on Streamlit.",
     tags: ["Python", "Groq / Gemini", "DuckDB"],
     repo: "https://github.com/Db2203/redditrecbuds",
     link: "https://redditrecbuds.streamlit.app",
     status: "LIVE — DEPLOYED",
     caseStudy: {
       context:
-        "The best earbud reviews aren't on review sites — they're buried in thousands of r/Earbuds comments, unstructured and unranked. And in late 2025, Reddit closing its API made even reading them at scale a problem to solve.",
+        "The most useful earbud reviews never reach review sites; they sit in thousands of r/Earbuds comments, unstructured and unranked. And when Reddit closed its API in late 2025, even reading them at scale turned into its own problem.",
       problem:
-        "Mine honest product opinions out of freeform Reddit text: get the data despite the API shutdown, extract which products people mean and how they feel, stop one enthusiastic user from voting fifty times, and rank so a product with 8 glowing mentions doesn't outrank one with 300 solid ones.",
+        "Pull honest product opinions out of freeform Reddit text: get the data despite the API shutdown, work out which products people mean and how they feel about them, stop one enthusiast from voting fifty times, and rank so a product with 8 glowing mentions doesn't beat one with 300 solid ones.",
       investigation: [
         {
           label: "INGEST",
           title: "Routed around the shutdown",
           detail:
-            "When the Reddit API closed in late 2025, the pipeline moved to Arctic Shift for data access — with checkpointed, resumable ingestion into DuckDB so a failed run never starts from zero.",
+            "When Reddit's API closed in late 2025, the pipeline switched to Arctic Shift for access — with checkpointed, resumable ingestion into DuckDB, so a failed run never restarts from zero.",
         },
         {
           label: "EXTRACT",
           title: "LLMs as structured readers",
           detail:
-            "Llama 3.1 (via Groq) and Gemini 2.5 Flash pull product mentions and sentiment out of raw comment text, deduplicated at the user level so one superfan counts once.",
+            "Llama 3.1 (via Groq) and Gemini 2.5 Flash read product mentions and sentiment straight out of raw comment text, deduplicated per user so one superfan counts once.",
         },
         {
           label: "RANK",
           title: "Statistics over vibes",
           detail:
-            "Scores blend 0.75 · log-volume with 0.25 · Wilson lower bound — popularity tempered by statistical confidence, so small hype clusters can't beat sustained consensus. Streamlit + Plotly serve the results.",
+            "The score blends 0.75 · log-volume with 0.25 · Wilson lower bound — popularity kept in check by statistical confidence, so a small burst of hype can't beat sustained agreement. Streamlit and Plotly render the results.",
         },
       ],
       resolution:
-        "Deployed and public: community wisdom, made rankable — with the receipts (mention volume, sentiment, confidence) shown instead of a black-box score.",
+        "Live and public. Scattered opinion becomes something you can rank and trust, and it shows its work: mention volume, sentiment, and confidence are all on screen instead of hidden behind one mystery number.",
       evidence: [
         { id: "ranking", kind: "graph", caption: "Volume × confidence ranking" },
         { id: "app", kind: "ui", caption: "The live recommender" },
@@ -335,21 +335,21 @@ export const projects: Project[] = [
 export const contact = {
   heading: "SEND THE SIGNAL",
   blurb:
-    "Have a project, a role, or a wild idea? I answer the signal — freelance work and full-time roles alike.",
+    "Got a project, a role, or a half-formed idea? Send it over — I'm open to full-time and freelance both.",
   email: profile.email,
   socials: profile.socials,
 };
 
 /** Detective Mode annotations — revealed by the D-key overlay. */
 export const annotations = {
-  hero: "Flashlight: a 260vmax gradient layer moved with transform only — composite-only, zero re-renders per mousemove. The intro sweep is a one-shot motion animation.",
-  work: "Card tilt: pointer offset → rotateX/Y springs. Rect cached on enter, never read per-move. Titles decrypt via a single rAF writing textContent.",
+  hero: "The flashlight is one 260vmax gradient layer, moved with transform alone — composite-only, no re-render on mousemove. The opening sweep is a single motion animation that fires once.",
+  work: "Card tilt: pointer offset feeds rotateX/Y springs. The rect is cached on enter, never read mid-move. Titles decrypt from one rAF loop writing textContent.",
   about:
-    "Server-rendered semantic HTML. Everything you see is crawlable — the atmosphere is a client-side enhancement layer.",
+    "Plain server-rendered semantic HTML — all of it crawlable. The atmosphere on top is a client-side layer you could strip away and still read the page.",
   interrogate:
-    "A Groq-backed streaming chat, zero client dependencies. The model is grounded on this site's own content data and refuses everything off the record.",
-  log: "Real data: GitHub's public contribution calendar and events API, fetched at build time and revalidated daily. No tokens, no tracking — just the public record.",
+    "A streaming chat with zero client dependencies, served by Groq and falling back to Gemini. It only knows this site's own content, and it won't talk off the record.",
+  log: "Real data — GitHub's public contribution calendar and events API, pulled at build time and refreshed daily. No tokens, no tracking, just the public record.",
   contact:
-    "Magnetic button: spring toward pointer, snap home on leave. The beam is one shared conic-gradient utility.",
-  case: "Statically generated at build time. The entrance is an overlay — the content underneath is server-rendered and crawlable.",
+    "Magnetic button: springs toward the pointer, snaps home on leave. The glow is one shared conic-gradient utility.",
+  case: "Generated as static HTML at build time. The declassify animation is just an overlay; the file underneath is server-rendered and fully crawlable.",
 };
