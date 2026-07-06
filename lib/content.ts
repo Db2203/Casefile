@@ -112,48 +112,54 @@ export const projects: Project[] = [
     year: "2026",
     category: "Geospatial ML + Full-Stack",
     summary:
-      "The fast route home hides its danger — an ML pipeline over 123,576 London collisions puts a number on it: 62% less risk for 19 extra minutes.",
+      "The fast route home hides its danger — an ML pipeline over 510k collisions in London and Dubai puts a number on it: 62% less risk for 19 extra minutes, plus the judgment to know where routing can't help.",
     description:
-      "Safety-aware navigation for London. Five years of UK STATS19 collision data become per-segment risk scores, and a modified Dijkstra offers the fastest and the safest route side by side — with the trade-off quantified.",
+      "Safety-aware navigation and road-safety analytics across two cities. The same pipeline turns five years of UK STATS19 data into London's fastest-vs-safest routing — then, tested on eight years of Dubai Police data, pivots to analytics when the road network offers no safer alternative.",
     tags: ["Python / scikit-learn", "PostGIS", "Next.js + Leaflet"],
     repo: "https://github.com/Db2203/saferoute",
     status: "CASE CLOSED",
     caseStudy: {
       context:
-        "Every navigation app optimizes for time. None of them will tell you that the ten-minutes-faster route runs through some of the most collision-dense streets in London. The data to answer that question exists — the UK publishes every police-recorded collision as open STATS19 data — it just wasn't wired into routing.",
+        "Every navigation app optimizes for time. None will tell you the ten-minutes-faster route runs through the most collision-dense streets in the city. The data to answer that exists — the UK and Dubai both publish police-recorded collisions — it just wasn't wired into routing. The harder question came later: does safety-aware routing even work everywhere?",
       problem:
-        "Turn five years of raw collision records into something a router can reason about: which road segments are actually dangerous, in what conditions, and what does a rider give up by avoiding them? The answer has to be a route, not a heat map.",
+        "Turn years of raw collision records into something a router can reason about — which segments are dangerous, in what conditions, and what a driver gives up to avoid them. Then stress-test the idea on a second city with a very different road network, and be willing to change the answer if the data demands it.",
       investigation: [
         {
           label: "EVIDENCE",
           title: "Profiled half a million collisions",
           detail:
-            "Ingested 503k UK collision records and cut them down to 123,576 geocoded London incidents. Built the city as a graph with OSMnx: 165,716 nodes, 381,109 edges.",
+            "Ingested 503k UK records down to 123,576 geocoded London incidents, plus 386,796 from eight years of Dubai Police data. Built London as a graph with OSMnx: 165,716 nodes, 381,109 edges.",
         },
         {
           label: "ANALYSIS",
           title: "Found where the city bites",
           detail:
-            "DBSCAN clustering surfaced 1,863 collision hotspots. A 200-tree Random Forest learned severity from context — weather, light, road type — and 64,652 road segments got individual risk scores.",
+            "DBSCAN surfaced 1,863 London hotspots. A 200-tree Random Forest learned severity from context — weather, light, road type — and 64,652 road segments got individual risk scores.",
         },
         {
           label: "THE ROUTE",
           title: "Made risk a routing cost",
           detail:
-            "Modified Dijkstra with a tunable risk/time weight, served by FastAPI over PostGIS. A Next.js + Leaflet frontend draws the fastest and safest routes side by side with the trade-off stated plainly.",
+            "Modified Dijkstra with a tunable risk/time weight (α·time + (1−α)·risk), served by FastAPI over PostGIS. A Next.js + Leaflet frontend draws the fastest and safest routes side by side — 62% less risk for 19 extra minutes.",
+        },
+        {
+          label: "THE PIVOT",
+          title: "Knew when to stop",
+          detail:
+            "Ran the same routing idea on Dubai and it failed honestly — collisions blanket ~48% of segments, so fastest and safest come out 0–1% apart. Rather than ship a hollow feature, SafeRoute Dubai became an analytics dashboard: 2,113 blackspots, severity by collision type, and a route-check that flags the danger you'll actually cross.",
         },
       ],
       resolution:
-        "The system answers the question no map app would: 'how much safety does speed cost?' A typical result — 62% lower collision-risk exposure for 19 extra minutes — turns an invisible gamble into an informed choice.",
+        "Two cities, two honest answers. London gets routing that quantifies the gamble no map app will name — 62% lower risk for 19 extra minutes. Dubai gets the intelligence its data can actually support, after routing was tested and rejected. Same pipeline; the judgment to know which product each dataset deserved.",
       evidence: [
-        { id: "map", kind: "skyline", caption: "Fastest vs safest, side by side" },
-        { id: "risk", kind: "graph", caption: "Collision-risk analytics dashboard" },
-        { id: "pipeline", kind: "blueprint", caption: "One pipeline, two cities: routing + analytics" },
+        { id: "map", kind: "skyline", caption: "London: fastest vs safest route" },
+        { id: "risk", kind: "graph", caption: "Dubai: collision-risk analytics" },
+        { id: "pipeline", kind: "blueprint", caption: "One pipeline, two cities" },
       ],
       impact: [
-        { value: "123,576", label: "COLLISIONS ANALYZED" },
-        { value: "1,863", label: "HOTSPOTS MAPPED" },
+        { value: "510K", label: "COLLISIONS, 2 CITIES" },
         { value: "-62%", label: "RISK, FOR +19 MIN" },
+        { value: "2 CITIES", label: "ROUTING + ANALYTICS" },
       ],
     },
   },
