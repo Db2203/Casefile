@@ -54,6 +54,7 @@ export const about = {
   fields: [
     { label: "SUBJECT", value: profile.name }, // follows the env-configured name
     { label: "KNOWN ALIASES", value: "The Data Wrangler. The Full-Stack Builder." },
+    { label: "COMMENDATIONS", value: "3× first place — competitive hackathons" },
     { label: "LAST SEEN", value: "Shipping at 2:47 AM" },
     { label: "MOTIVE", value: "Real problems, measurable outcomes" },
   ],
@@ -62,14 +63,22 @@ export const about = {
     "I also treat the frontend as a craft, not an afterthought. Exhibit A: this site — every texture is CSS or seeded SVG, every animation runs on one budgeted frame loop, and the whole case archive is server-rendered underneath the noir.",
   ],
   skills: [
-    "Python & ML Pipelines",
-    "React / Next.js / TypeScript",
-    "FastAPI & Flask",
+    "Python",
+    "TypeScript / JavaScript",
+    "Java · C/C++",
+    "React / Next.js",
+    "Node · FastAPI · Flask",
+    "Tailwind & Motion Craft",
     "PostgreSQL · PostGIS · pgvector",
-    "Distributed SQL",
-    "LLM Integration",
+    "DuckDB · SQLite · MySQL",
+    "scikit-learn · PyTorch",
+    "OpenCV · Transformers",
+    "LLM APIs — Gemini · Groq · Ollama",
+    "ML & Data Pipelines",
     "Docker & Self-Hosting",
-    "Motion & Interaction Craft",
+    "AWS — S3 · Lambda · EC2",
+    "GitHub Actions · CI",
+    "Data Structures · Algorithms · System Design",
   ],
 };
 
